@@ -1,7 +1,8 @@
 ### Big ass Datasett ###
-src/main/resources/interessepkt.txt
-src/main/resources/kanter.txt
-src/main/resources/noder.txt
+/src/main/resources/interessepkt.txt
+/src/main/resources/kanter.txt
+/src/main/resources/noder.txt
+
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
