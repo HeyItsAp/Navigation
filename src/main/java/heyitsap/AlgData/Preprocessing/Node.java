@@ -10,6 +10,15 @@ public class Node {
     public final double longitude;
     public byte POICode;
     public String POI;
+    /* POI codes:
+    Bit     Betyr           Eksempler
+    1       Stedsnavn       Trondheim, Moholt, …
+    2       Bensinstasjon   Shell Herlev
+    4       Ladestasjon     Ionity Klett
+    8       Spisested       Restauranter, kafeer, puber
+    16      Drikkested      Barer, puber, nattklubber
+    32      Overnattings    Hoteller, moteller, gjestehu
+     */
 
     public Node(int id, double latitude, double longitude){
         this.edges = new ArrayList<>();

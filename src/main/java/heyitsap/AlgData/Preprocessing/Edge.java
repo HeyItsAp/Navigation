@@ -2,11 +2,11 @@ package heyitsap.AlgData.Preprocessing;
 
 
 public class Edge {
-    private final Node from;
-    private final Node to;
-    private final int drivingTime; // In 1/100 of a second i dont knwo why
-    private final int length; // The main weight. Also, 1/100 of a second.
-    private final int speedLimit; // Km/h
+    public final Node from;
+    public final Node to;
+    public final int drivingTime; // In 1/100 of a second i dont knwo why
+    public final int length; // The main weight. Also, 1/100 of a second.
+    public final int speedLimit; // Km/h
 
     public Edge(Node from, Node to, int drivingTime, int length, int speedLimit){
         this.drivingTime = drivingTime;

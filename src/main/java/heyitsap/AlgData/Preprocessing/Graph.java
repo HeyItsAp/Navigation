@@ -37,5 +37,32 @@ public class Graph {
         return nodes;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
+        sb.append("Graph with ")
+                .append(nodes.size())
+                .append(" nodes\n");
+
+        for (Node node : nodes.values()) {
+            sb.append("Node ")
+                    .append(node.id)
+                    .append(" (lat: ")
+                    .append(node.latitude)
+                    .append(", lon: ")
+                    .append(node.longitude)
+                    .append(")\n");
+
+            for (Edge edge : node.edges) {
+                sb.append("  -> Node ")
+                        .append(edge.to)
+                        .append(" (weight: ")
+                        .append(edge.length)
+                        .append(")\n");
+            }
+        }
+
+        return sb.toString();
+    }
 }
