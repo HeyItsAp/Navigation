@@ -1,8 +1,22 @@
 package heyitsap.AlgData;
 
 
+import heyitsap.AlgData.Preprocessing.Graph;
+import heyitsap.AlgData.Preprocessing.Preprosessing;
+
+import java.io.IOException;
+
 public class Main {
     static void main() {
-        Map.test();
+        Graph graph = new Graph();
+        try {
+            Preprosessing.populateWithNodes(graph);
+            Preprosessing.populateNodesWithEdges(graph);
+            Preprosessing.populateNodesWithPOI(graph);
+            graph.toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 }
