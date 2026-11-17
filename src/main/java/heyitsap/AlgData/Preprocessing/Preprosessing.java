@@ -11,11 +11,10 @@ import java.nio.file.Path;
 
 public class Preprosessing {
     public static Graph populateWithNodes(Graph graph) throws IOException {
-        String txtFile = "/island/noder.text";
+        Path txtFile = Path.of("src/main/resources/island/noder.text");
         System.out.println("Reading nodes from " + txtFile);
-        Path outputFolder = Path.of("Resources");
-        Files.createDirectories(outputFolder);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream(txtFile)))){
+
+        try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
             br.readLine(); // To skip first line
 
             String line;
@@ -46,11 +45,9 @@ public class Preprosessing {
         if (graph.getNodes().isEmpty()){
             throw new IllegalArgumentException("Graph does not have any nodes");
         }
-        String txtFile = "/island/kanter.txt";
+        Path txtFile = Path.of("src/main/resources/island/noder.text");
         System.out.println("Reading nodes from " + txtFile);
-        Path outputFolder = Path.of("Resources");
-        Files.createDirectories(outputFolder);
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream(txtFile)))){
+        try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
             br.readLine(); // To skip first line
 
             String line;
@@ -82,12 +79,9 @@ public class Preprosessing {
             throw new IllegalArgumentException("Graph does not have any nodes");
         }
 
-        String txtFile = "island/interessepkt.txt";
+        Path txtFile = Path.of("src/main/resources/island/noder.text");
         System.out.println("Reading nodes from " + txtFile);
-        Path outputFolder = Path.of("Resources");
-        Files.createDirectories(outputFolder);
-        try (BufferedReader br = new BufferedReader(new FileReader(String.valueOf(Main.class.getResource(txtFile))))){
-
+        try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
                 br.readLine(); // To skip first line
 
                 String line;
