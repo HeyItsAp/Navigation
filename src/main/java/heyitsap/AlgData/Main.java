@@ -1,7 +1,7 @@
 package heyitsap.AlgData;
 
 
-import heyitsap.AlgData.Preprocessing.Graph;
+import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Preprocessing.Preprosessing;
 
 import java.io.IOException;

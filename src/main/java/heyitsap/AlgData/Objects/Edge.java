@@ -1,4 +1,4 @@
-package heyitsap.AlgData.Preprocessing;
+package heyitsap.AlgData.Objects;
 
 
 public class Edge {

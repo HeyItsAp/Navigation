@@ -1,4 +1,4 @@
-package heyitsap.AlgData.Preprocessing;
+package heyitsap.AlgData.Objects;
 
 import java.util.HashMap;
 import java.util.Map;
