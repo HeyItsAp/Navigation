@@ -9,37 +9,105 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Preprosessing {
-    public static void readNodes() throws IOException {
+    public static Graph populateWithNodes(Graph graph) throws IOException {
         String txtFile = "island/noder.text";
         System.out.println("Reading nodes from " + txtFile);
         Path outputFolder = Path.of("Resources");
         Files.createDirectories(outputFolder);
         try (BufferedReader br = new BufferedReader(new FileReader(String.valueOf(Main.class.getResource(txtFile))))){
-            br.readLine(); // To skip first line about amount of edges and nodes.
+            br.readLine(); // To skip first line
 
             String line;
             while ((line = br.readLine()) != null){
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                String[] splittedline = hsplit(line, 3);
-                if (splittedline.length != 3){
+                String[] splittedLine = hsplit(line, 3);
+                if (splittedLine.length != 3){
                     continue;
                 }
 
-                int nodeId = Integer.parseInt(splittedline[0]);
-                double latitude = Integer.parseInt(splittedline[1]);
-                int longitude = Integer.parseInt(splittedline[2]);
+                int nodeId = Integer.parseInt(splittedLine[0]);
+                double latitude = Integer.parseInt(splittedLine[1]);
+                double longitude = Integer.parseInt(splittedLine[2]);
 
-                Node node = new Node(nodeId, latitude, longitude);
-
+                graph.addNode(nodeId,latitude,longitude);
             }
             System.out.println("Reading Success!!");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return graph;
+    }
+    public static Graph populateNodesWithEdges(Graph graph) throws IOException {
+        if (graph.getNodes().isEmpty()){
+            throw new IllegalArgumentException("Graph does not have any nodes");
+        }
 
+        String txtFile = "island/kanter.txt";
+        System.out.println("Reading nodes from " + txtFile);
+        Path outputFolder = Path.of("Resources");
+        Files.createDirectories(outputFolder);
+        try (BufferedReader br = new BufferedReader(new FileReader(String.valueOf(Main.class.getResource(txtFile))))){
+            br.readLine(); // To skip first line
+
+            String line;
+            while ((line = br.readLine()) != null){
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] splittedLine = hsplit(line, 5);
+                if (splittedLine.length != 5){
+                    continue;
+                }
+                int from = Integer.parseInt(splittedLine[0]);
+                int to = Integer.parseInt(splittedLine[1]);
+                int drivingTime = Integer.parseInt(splittedLine[2]);
+                int length = Integer.parseInt(splittedLine[3]);
+                int speedLimit = Integer.parseInt(splittedLine[4]);
+                graph.addEdge(from, to, drivingTime, length, speedLimit);
+            }
+            System.out.println("Reading Success!!");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return graph;
+    }
+
+    public static Graph populateNodesWithPOI(Graph graph) throws IOException {
+        if (graph.getNodes().isEmpty()){
+            throw new IllegalArgumentException("Graph does not have any nodes");
+        }
+
+        String txtFile = "island/interessepkt.txt";
+        System.out.println("Reading nodes from " + txtFile);
+        Path outputFolder = Path.of("Resources");
+        Files.createDirectories(outputFolder);
+        try (BufferedReader br = new BufferedReader(new FileReader(String.valueOf(Main.class.getResource(txtFile))))){
+            br.readLine(); // To skip first line
+
+            String line;
+            while ((line = br.readLine()) != null){
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] splittedLine = hsplit(line, 3);
+                if (splittedLine.length != 3){
+                    continue;
+                }
+                int nodeId = Integer.parseInt(splittedLine[0]);
+                byte codePOI = Byte.parseByte(splittedLine[1]);
+                String namePOI = splittedLine[2];
+                graph.getNode(nodeId).setPOI(codePOI, namePOI);
+            }
+            System.out.println("Reading Success!!");
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return graph;
     }
 
 
