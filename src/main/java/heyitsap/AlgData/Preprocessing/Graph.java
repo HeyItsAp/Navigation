@@ -32,4 +32,10 @@ public class Graph {
     public int size() {
         return nodes.size();
     }
+
+    public Map<Integer, Node> getNodes() {
+        return nodes;
+    }
+
+
 }

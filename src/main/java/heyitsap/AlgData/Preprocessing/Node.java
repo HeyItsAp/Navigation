@@ -19,8 +19,8 @@ public class Node {
     }
 
     public void setPOI(byte POICode, String POI){
-        this.POI = POI;
-        this.POICode = POICode;
+        this.POI += (" " + POI);
+        this.POICode += POICode;
     }
 }
 
