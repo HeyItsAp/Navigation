@@ -6,15 +6,15 @@ import java.util.List;
 public class Node {
     public List<Edge> edges;
     public final int id;
-    public double latitdue;
-    public double longitude;
+    public final double latitude;
+    public final double longitude;
     public byte POICode;
     public String POI;
 
-    public Node(int id, double latitdue, double longitude){
+    public Node(int id, double latitude, double longitude){
         this.edges = new ArrayList<>();
         this.id = id;
-        this.latitdue = latitdue;
+        this.latitude = latitude;
         this.longitude = longitude;
     }
 

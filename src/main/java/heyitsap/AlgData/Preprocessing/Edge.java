@@ -4,7 +4,7 @@ package heyitsap.AlgData.Preprocessing;
 public class Edge {
     private final Node from;
     private final Node to;
-    private final int drivingTime; // 1/100 of a second
+    private final int drivingTime; // The main weight. In 1/100 of a second i dont knwo why
     private final int length; // Meters
     private final int speedLimit; // Km/h
 
@@ -15,4 +15,5 @@ public class Edge {
         this.from = from;
         this.to = to;
     }
+
 }
