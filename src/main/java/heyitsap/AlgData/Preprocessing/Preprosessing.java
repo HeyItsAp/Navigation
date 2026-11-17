@@ -16,20 +16,16 @@ public class Preprosessing {
 
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
             br.readLine(); // To skip first line
-
             String line;
             while ((line = br.readLine()) != null){
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
                 String[] splittedLine = hsplit(line, 3);
-                if (splittedLine.length != 3){
-                    continue;
-                }
-
+                System.out.println(splittedLine[0] + " " + splittedLine[1] + " " + splittedLine[2]);
                 int nodeId = Integer.parseInt(splittedLine[0]);
-                double latitude = Integer.parseInt(splittedLine[1]);
-                double longitude = Integer.parseInt(splittedLine[2]);
+                double latitude = Double.parseDouble(splittedLine[1]);
+                double longitude = Double.parseDouble(splittedLine[2]);
 
                 graph.addNode(nodeId,latitude,longitude);
             }
@@ -46,7 +42,7 @@ public class Preprosessing {
             throw new IllegalArgumentException("Graph does not have any nodes");
         }
         Path txtFile = Path.of("src/main/resources/island/kanter.txt");
-        System.out.println("Reading nodes from " + txtFile);
+        System.out.println("Reading Edges from " + txtFile);
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
             br.readLine(); // To skip first line
 
@@ -56,9 +52,7 @@ public class Preprosessing {
                 if (line.isEmpty()) continue;
 
                 String[] splittedLine = hsplit(line, 5);
-                if (splittedLine.length != 5){
-                    continue;
-                }
+
                 int from = Integer.parseInt(splittedLine[0]);
                 int to = Integer.parseInt(splittedLine[1]);
                 int drivingTime = Integer.parseInt(splittedLine[2]);
@@ -80,7 +74,7 @@ public class Preprosessing {
         }
 
         Path txtFile = Path.of("src/main/resources/island/interessepkt.txt");
-        System.out.println("Reading nodes from " + txtFile);
+        System.out.println("Reading POI from " + txtFile);
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
                 br.readLine(); // To skip first line
 
@@ -90,9 +84,7 @@ public class Preprosessing {
                     if (line.isEmpty()) continue;
 
                     String[] splittedLine = hsplit(line, 3);
-                    if (splittedLine.length != 3){
-                        continue;
-                    }
+
                     int nodeId = Integer.parseInt(splittedLine[0]);
                     byte codePOI = Byte.parseByte(splittedLine[1]);
                     String namePOI = splittedLine[2];
@@ -116,12 +108,12 @@ public class Preprosessing {
         // Alle ascii-verdier <= mellomrom er blanke/skilletegn
         // Alle ascii-verdier > mellomrom former ord.
 
-        String[] felt = new String[10]; // Max 10 felt i en linje
+        String[] felt = new String[amount]; // Max 10 felt i en linje
         int j = 0;
         int length = line.length();
         for (int i = 0; i < amount; ++i) {
             //Hopp over innledende blanke, finn starten på ordet
-            while (line.charAt(j) <= ' ') ++j;
+            while (j < length && line.charAt(j) <= ' ') ++j;
             int ordstart = j;
             //Finn slutten på ordet, hopp over ikke-blanke
             while (j < length && line.charAt(j) > ' ') ++j;

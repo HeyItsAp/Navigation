@@ -52,11 +52,15 @@ public class Graph {
                     .append(node.latitude)
                     .append(", lon: ")
                     .append(node.longitude)
+                    .append(", POI: ")
+                    .append(node.POI)
+                    .append(", POI_Code: ")
+                    .append(node.POICode)
                     .append(")\n");
 
             for (Edge edge : node.edges) {
                 sb.append("  -> Node ")
-                        .append(edge.to)
+                        .append(edge.to.id)
                         .append(" (weight: ")
                         .append(edge.length)
                         .append(")\n");

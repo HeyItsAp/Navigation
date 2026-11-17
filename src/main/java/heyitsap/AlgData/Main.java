@@ -13,7 +13,7 @@ public class Main {
             Preprosessing.populateWithNodes(graph);
             Preprosessing.populateNodesWithEdges(graph);
             Preprosessing.populateNodesWithPOI(graph);
-            graph.toString();
+            System.out.println(graph);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
