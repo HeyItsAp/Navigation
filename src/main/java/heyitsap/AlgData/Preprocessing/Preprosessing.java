@@ -11,7 +11,7 @@ import java.nio.file.Path;
 
 public class Preprosessing {
     public static Graph populateWithNodes(Graph graph) throws IOException {
-        Path txtFile = Path.of("src/main/resources/island/noder.text");
+        Path txtFile = Path.of("src/main/resources/island/noder.txt");
         System.out.println("Reading nodes from " + txtFile);
 
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
@@ -45,7 +45,7 @@ public class Preprosessing {
         if (graph.getNodes().isEmpty()){
             throw new IllegalArgumentException("Graph does not have any nodes");
         }
-        Path txtFile = Path.of("src/main/resources/island/noder.text");
+        Path txtFile = Path.of("src/main/resources/island/kanter.txt");
         System.out.println("Reading nodes from " + txtFile);
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
             br.readLine(); // To skip first line
@@ -79,7 +79,7 @@ public class Preprosessing {
             throw new IllegalArgumentException("Graph does not have any nodes");
         }
 
-        Path txtFile = Path.of("src/main/resources/island/noder.text");
+        Path txtFile = Path.of("src/main/resources/island/interessepkt.txt");
         System.out.println("Reading nodes from " + txtFile);
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
                 br.readLine(); // To skip first line
