@@ -12,15 +12,18 @@ public class RecordPath {
     public int start;
     public int end;
     public final List<Integer> nodeIds;
+    public int processedNodes;
 
     // To create a weighted path of a graph; A -> B -> C -> D -> E -> F -> G
-    public RecordPath(Map<Integer, Integer> previous, int start, int end, Graph graph, String name){
+    public RecordPath(Map<Integer, Integer> previous, int start, int end, Graph graph, String name, int processedNodes){
         this.name = name;
         this.graph = new Graph();
         this.start = start;
         this.end = end;
         List<Integer> linkedPath = reconstructPathEndToStart(previous, start, end);
         this.nodeIds = linkedPath;
+        this.processedNodes = processedNodes;
+
         ListIterator<Integer> NodeIterator = linkedPath.listIterator();
         Integer previousid = null;
         while (NodeIterator.hasNext()){
