@@ -7,24 +7,25 @@ import heyitsap.AlgData.Objects.Node;
 import java.util.*;
 
 public class RecordPath {
-    public Graph graph = new Graph();
+    public Graph graph;
     public String name;
 
     // To create a weighted path of a graph; A -> B -> C -> D -> E -> F -> G
     public RecordPath(Map<Integer, Integer> previous, int start, int end, Graph graph, String name){
         this.name = name;
+        this.graph = new Graph();
         List<Integer> linkedPath = reconstructPathEndToStart(previous, start, end);
         ListIterator<Integer> iterator = linkedPath.listIterator();
         while (iterator.hasNext()){
             int current = iterator.next();
             Node recraetedNode = graph.getNode(current);
-            graph.addNodeWithPOI(recraetedNode.id, recraetedNode.latitude, recraetedNode.longitude, recraetedNode.POICode, recraetedNode.POI);
+            this.graph.addNodeWithPOI(recraetedNode.id, recraetedNode.latitude, recraetedNode.longitude, recraetedNode.POICode, recraetedNode.POI);
 
             if (iterator.hasNext()){
                 int next = iterator.next();
                 iterator.previous();
                 Edge dedicatedEdge = graph.getNode(current).edges.stream().filter(e -> e.to.id == next).findFirst().orElse(null);
-                graph.addEdge(dedicatedEdge.from.id, dedicatedEdge.to.id, dedicatedEdge.drivingTime, dedicatedEdge.length, dedicatedEdge.speedLimit);
+                this.graph.addEdge(dedicatedEdge.from.id, dedicatedEdge.to.id, dedicatedEdge.drivingTime, dedicatedEdge.length, dedicatedEdge.speedLimit);
             }
         }
     }
