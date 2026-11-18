@@ -7,6 +7,7 @@ import heyitsap.AlgData.Objects.Node;
 import java.util.*;
 
 public class Dijkstras {
+    /* Underdeveloped / Forgetton*/
     public static RecordPath DijsktrasStartEnd(Graph graph, int start, int end) {
         Node startNode = graph.getNode(start);
         Node endNode = graph.getNode(end);
@@ -37,7 +38,7 @@ public class Dijkstras {
 
             // Destination reached
             if (currentNode.id == end) {
-                return new RecordPath(previous, start, end, graph, "From, " + start + " To, " + end);
+                return new RecordPath(previous, start, end, graph, "From, " + start + " To, " + end, currentDistance);
             }
 
             // Explore
@@ -83,6 +84,7 @@ public class Dijkstras {
 
         PriorityQueue<QueueEntry> Pq = new PriorityQueue<>(Comparator.comparingInt(QueueEntry::distance));
         ArrayList<RecordPath> listOfPaths = new ArrayList<>();
+        int processednodes = 0;
 
         distances.put(start, 0);
         Pq.add(new QueueEntry(startNode, 0));
@@ -97,12 +99,14 @@ public class Dijkstras {
                 continue;
             }
 
+            processednodes++;
+
             // Destination reached
             if (listOfPaths.size() == amount){
                 return listOfPaths;
             } else {
                 if ((currentNode.POICode & POICode) == POICode) {
-                    listOfPaths.add(new RecordPath(previous,start,currentNode.id,graph," "));
+                    listOfPaths.add(new RecordPath(previous,start,currentNode.id,graph," ",processednodes));
                 }
             }
 
