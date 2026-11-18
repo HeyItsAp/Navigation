@@ -2,10 +2,12 @@ package heyitsap.AlgData;
 
 
 import heyitsap.AlgData.Navigation.Dijkstras;
+import heyitsap.AlgData.Navigation.RecordPath;
 import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Preprocessing.Preprosessing;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
     static void main() {
@@ -20,7 +22,8 @@ public class Main {
         }
 
         try {
-            System.out.println(Dijkstras.DijsktrasUntilXAmountPOI(graph, 50000, 8, 5).getFirst());
+            ArrayList<RecordPath> paths = Dijkstras.DijsktrasUntilXAmountPOI(graph, 50000, 8, 5);
+            Map.showPath(paths.getFirst());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
