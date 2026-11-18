@@ -27,6 +27,15 @@ public class Node {
         this.longitude = longitude;
     }
 
+    public Node(int id, double latitude, double longitude, Byte POICode, String POI){
+        this.edges = new ArrayList<>();
+        this.id = id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.POICode = POICode;
+        this.POI = POI;
+    }
+
     public void setPOI(byte POICode, String POI){
         this.POI += (" " + POI);
         this.POICode += POICode;
