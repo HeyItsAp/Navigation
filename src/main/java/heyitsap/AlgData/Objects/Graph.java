@@ -12,6 +12,12 @@ public class Graph {
         }
         nodes.put(id, new Node(id, latitude, longitude));
     }
+    public void addNodeWithPOI(int id, double latitude, double longitude, byte POICode, String POI){
+        if (nodes.containsKey(id)){
+            throw new IllegalArgumentException(id + ", Node already exists");
+        }
+        nodes.put(id, new Node(id, latitude, longitude, POICode, POI));
+    }
     public void addEdge(int from, int to, int drivingTime, int length, int speedLimit){
         if (drivingTime < 0) {
             throw new IllegalArgumentException("Negative weight");
