@@ -1,4 +1,4 @@
-package heyitsap.AlgData.Preprocessing;
+package heyitsap.AlgData;
 
 import heyitsap.AlgData.Objects.Graph;
 
@@ -7,9 +7,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class Preprosessing {
+/**
+ * Files have exact name as in shown in assignment paper.
+ *      - Test files (Island) lie in resources folder.
+ *      - The assigned files just lie in the resources folder.
+ */
+public class DatasettManager {
+    static Path txtFileNodes = Path.of("src/main/resources/island/noder.txt");
+    static Path txtFileKanter = Path.of("src/main/resources/island/kanter.txt");
+    static Path txtFilePOI = Path.of("src/main/resources/island/interessepkt.txt");
+
+
     public static Graph populateWithNodes(Graph graph) throws IOException {
-        Path txtFile = Path.of("src/main/resources/island/noder.txt");
+        // ===========================
+        Path txtFile = txtFileNodes;
+        // ===========================
+
         System.out.println("Reading nodes from " + txtFile);
 
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
@@ -39,7 +52,11 @@ public class Preprosessing {
         if (graph.getNodes().isEmpty()){
             throw new IllegalArgumentException("Graph does not have any nodes");
         }
-        Path txtFile = Path.of("src/main/resources/island/kanter.txt");
+
+        // ===========================
+        Path txtFile = txtFileKanter;
+        // ===========================
+
         System.out.println("Reading Edges from " + txtFile);
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
             br.readLine(); // To skip first line
@@ -70,8 +87,10 @@ public class Preprosessing {
         if (graph.getNodes().isEmpty()){
             throw new IllegalArgumentException("Graph does not have any nodes");
         }
+        // ===========================
+        Path txtFile = txtFilePOI;
+        // ===========================
 
-        Path txtFile = Path.of("src/main/resources/island/interessepkt.txt");
         System.out.println("Reading POI from " + txtFile);
         try (BufferedReader br = new BufferedReader(Files.newBufferedReader(txtFile))){
                 br.readLine(); // To skip first line
