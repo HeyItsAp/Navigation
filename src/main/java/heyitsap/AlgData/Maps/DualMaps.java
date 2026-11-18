@@ -10,10 +10,7 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 
 import javax.swing.*;
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,21 +45,46 @@ public class DualMaps {
             drawPaths(mapA, listA);
             drawPaths(mapB, listB);
 
-            // Panels with labels
+            // Panel A
             JPanel panelA = new JPanel(new BorderLayout());
-            panelA.add(
-                    new JLabel("List A - " + listA.size() + " paths",
-                            SwingConstants.CENTER),
-                    BorderLayout.NORTH
-            );
+
+            JPanel labelsA = new JPanel();
+            labelsA.setLayout(new BoxLayout(labelsA, BoxLayout.Y_AXIS));
+
+            JLabel titleA = new JLabel("List A - " + listA.size() + " paths",SwingConstants.CENTER);
+            titleA.setAlignmentX(Component.CENTER_ALIGNMENT);
+            labelsA.add(titleA);
+
+            int j = 0;
+            for (RecordPath A : listA) {
+                j++;
+                JLabel label = new JLabel(j + ": " + A.processedNodes);
+                label.setAlignmentX(Component.CENTER_ALIGNMENT);
+                labelsA.add(label);
+            }
+
+            panelA.add(labelsA, BorderLayout.NORTH);
             panelA.add(mapA, BorderLayout.CENTER);
 
+
+            // Panel B
             JPanel panelB = new JPanel(new BorderLayout());
-            panelB.add(
-                    new JLabel("List B - " + listB.size() + " paths",
-                            SwingConstants.CENTER),
-                    BorderLayout.NORTH
-            );
+
+            JPanel labelsB = new JPanel();
+            labelsB.setLayout(new BoxLayout(labelsB, BoxLayout.Y_AXIS));
+
+            JLabel titleB = new JLabel("List B - " + listB.size() + " paths",SwingConstants.CENTER);
+            titleB.setAlignmentX(Component.CENTER_ALIGNMENT);
+            labelsB.add(titleB);
+            int i = 0;
+            for (RecordPath B : listB){
+                i++;
+                JLabel label = new JLabel(i + ": " + B.processedNodes);
+                label.setAlignmentX(Component.CENTER_ALIGNMENT);
+                labelsB.add(label);
+            }
+
+            panelB.add(labelsB, BorderLayout.NORTH);
             panelB.add(mapB, BorderLayout.CENTER);
 
             // Place maps side by side
