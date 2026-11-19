@@ -193,7 +193,31 @@ public class ALT {
     }
 
 
-;   public static int EstimatedDistance(){
+;   public static int EstimatedDistance(int nodeId, int targetId, int[][] from, int[][] to){
+        // prioirty thing f
+        int h = 0;
+        for (int i = 0; i < from[nodeId].length; i++) {
+            int landmarkToNode = from[nodeId][i];
+            int landmarkToTarget = from[targetId][i];
 
+            int nodeToLandmark = to[nodeId][i];
+            int targetToLandmark = to[targetId][i];
+
+            // Ignore unreachable distances
+            if (landmarkToNode != Integer.MAX_VALUE &&
+                    landmarkToTarget != Integer.MAX_VALUE) {
+
+                h = Math.max(h,
+                        landmarkToTarget - landmarkToNode);
+            }
+
+            if (nodeToLandmark != Integer.MAX_VALUE &&
+                    targetToLandmark != Integer.MAX_VALUE) {
+
+                h = Math.max(h,
+                        (nodeToLandmark - targetToLandmark);
+            }
+        }
+        return h;
     }
 }
