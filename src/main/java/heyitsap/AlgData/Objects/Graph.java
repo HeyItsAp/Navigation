@@ -43,6 +43,40 @@ public class Graph {
         return nodes;
     }
 
+    public Graph reverseGraph(){
+        Graph reversed = new Graph();
+
+        // Step 1: Copy all nodes
+        for (Node node : nodes.values()) {
+            reversed.addNodeWithPOI(
+                    node.id,
+                    node.latitude,
+                    node.longitude,
+                    node.POICode,
+                    node.POI
+            );
+        }
+
+        // Step 2: Reverse every edge
+        for (Node node : nodes.values()) {
+
+            for (Edge edge : node.edges) {
+
+                int from = node.id;
+                int to = edge.to.id;
+                int drivingTime = edge.drivingTime;
+                int length = edge.length;
+                int speedLimit = edge.speedLimit;
+
+                // Original: from -> to
+                // Reversed: to -> from
+                reversed.addEdge(to, from, drivingTime, length, speedLimit);
+            }
+        }
+
+        return reversed;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
