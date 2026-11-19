@@ -32,7 +32,7 @@ public class ALT {
                 countLine.trim();
                 int nodeCount = Integer.parseInt(countLine);
                 if (nodeCount != graph.getNodes().size()){
-                    throw new IllegalArgumentException("Not coherent Landmark files");
+                    throw new IllegalArgumentException("Not coherent Landmark files (1, Nodecount): Files: " + nodeCount + ", Graph: " + graph.getNodes().size());
                 }
 
                 distancesFrom = new int[nodeCount][countLandmarks];
@@ -49,7 +49,8 @@ public class ALT {
 
                     String[] splittedLine = hsplit(line, countLandmarks);
                     if (splittedLine.length-1 != countLandmarks){
-                        throw new IllegalArgumentException("Not choerent Landmark files");
+                        throw new IllegalArgumentException("Not coherent Landmark files (1, landmark count): Files: " + (splittedLine.length-1) + ", Input: " + countLandmarks);
+
                     }
 
                     int nodeId = Integer.parseInt(splittedLine[0]);
@@ -64,7 +65,8 @@ public class ALT {
                 }
                 System.out.println("Reading Success!!");
                 return distancesFrom;
-            } catch (IllegalArgumentException _){
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
                 check = false;
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -114,8 +116,8 @@ public class ALT {
                     bw.newLine();
 
                     // Write each node and its landmark distances
+                    System.out.println("Writing to write nodes...");
                     for (int nodeId = 0; nodeId < distancesFrom.length; nodeId++) {
-                        System.out.println("Writing to write nodeId; "+ nodeId);
 
 
                         StringBuilder sb = new StringBuilder();
