@@ -19,15 +19,18 @@ public class ALT {
     public static int[] nordenLandmarks;
     public static Path outputFolder = Path.of("Resources");
     public static File FromLandmarks = new File("Resources/FromLandmarks.txt");
+    public static File ToLandmarks = new File("Resources/ToLandmarks.txt");
 
 
-    public static int[][] PreprossesingFromLandmarks(Graph graph, int nodeNr, int[] landmarks){
+    /* if From is true; read and write to FromLandsmarks. If not; read and write to ToLandsmarks.txt */
+    public static int[][] PreprossesingLandmarks(Graph graph, int nodeNr, int[] landmarks, boolean From){
         boolean check = false;
+        File dedicatedFile = From ? FromLandmarks : ToLandmarks;
         int countLandmarks = landmarks.length;
 
         int[][] distancesFrom;
-        if (FromLandmarks.exists()){
-            try (BufferedReader br = new BufferedReader(new FileReader(FromLandmarks))){
+        if (dedicatedFile.exists()){
+            try (BufferedReader br = new BufferedReader(new FileReader(dedicatedFile))){
                 System.out.println("Reading throught From landsmarks file");
                 String infoLine = br.readLine();
                 if (infoLine == null){
@@ -112,10 +115,9 @@ public class ALT {
             // Writing to file.
             try {
                 Files.createDirectories(outputFolder);
-                File FromLandmarks = new File("Resources/FromLandmarks.txt");
 
                 try (BufferedWriter bw = new BufferedWriter(
-                        new FileWriter(FromLandmarks))) {
+                        new FileWriter(dedicatedFile))) {
 
                     // First line: number of nodes
                     bw.write(distancesFrom.length + " " + nodeNr);
@@ -156,13 +158,6 @@ public class ALT {
         return null;
 
     }
-
-    public static int[][] PreprossesingToLandmarks(){
-        return null;
-    }
-
-
-
 
     public static RecordPath ALTUntilXAmountPOI(Graph graph, int start, int POICode, int amount){
         return null;
