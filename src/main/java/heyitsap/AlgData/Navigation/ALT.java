@@ -202,6 +202,46 @@ public class ALT {
         return (node.POICode & poiCode) == 0;
     }
 
+
+    private static long POIHeuristic(
+            int nodeId,
+            int[][] distancesFrom,
+            int[][] distancesTo,
+            POIBound bounds) {
+
+        long h = 0;
+        int INF = Integer.MAX_VALUE;
+
+        for (int i = 0; i < bounds.minFrom.length; i++) {
+
+            int fromNode = distancesFrom[nodeId][i];
+            int toNode = distancesTo[nodeId][i];
+
+            // Lower bound using FROM landmarks
+            if (fromNode != INF &&
+                    bounds.minFrom[i] != INF) {
+
+                long estimate =
+                        (long) bounds.minFrom[i] - fromNode;
+
+                h = Math.max(h, estimate);
+            }
+
+            // Lower bound using TO landmarks
+            if (toNode != INF &&
+                    bounds.maxTo[i] != INF) {
+
+                long estimate =
+                        (long) toNode - bounds.maxTo[i];
+
+                h = Math.max(h, estimate);
+            }
+        }
+
+        return h;
+    }
+
+
     public static ArrayList<RecordPath> ALTUntilXAmountPOI(Graph graph, int start, int POICode, int amount, int[] landmarks){
         Node startNode = graph.getNode(start);
         int length = graph.getNodes().size();
