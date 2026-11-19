@@ -7,39 +7,37 @@ import heyitsap.AlgData.Objects.Node;
 import java.util.*;
 
 public class Dijkstras {
+
+    record QueueEntry(Node node, int distance) {}
     /* Underdeveloped / Forgetton*/
-    public static RecordPath DijsktrasStartEnd(Graph graph, int start, int end) {
+    public static int[][] DijsktrasFromLandsmarks(Graph graph, int start, int landmarkIndex, int[][] distancesFrom) {
         Node startNode = graph.getNode(start);
-        Node endNode = graph.getNode(end);
-
-        int length = graph.getNodes().size();
-
-        // id of node, distance
-        Map<Integer, Integer> distances = new HashMap<>();
-        // id of node, node
-        Map<Integer, Integer> previous = new HashMap<>();
-        record QueueEntry(Node node, int distance) {
+        if (startNode == null) {
+            throw new IllegalArgumentException(
+                    "Landmark does not exist: " + start
+            );
         }
 
         PriorityQueue<QueueEntry> Pq = new PriorityQueue<>(Comparator.comparingInt(QueueEntry::distance));
 
-        distances.put(start, 0);
+        // Distance from landmark to itself = 0
+        distancesFrom[start][landmarkIndex] = 0;
         Pq.add(new QueueEntry(startNode, 0));
 
         while (!Pq.isEmpty()) {
             QueueEntry entry = Pq.poll();
+
             Node currentNode = entry.node;
+            int nodeId = currentNode.id;
             int currentDistance = entry.distance;
 
-            // Ignore outdated entries
-            if (currentDistance != distances.get(currentNode.id)) {
+            // Skip outdated queue entries
+            if (currentDistance !=
+                    distancesFrom[nodeId][landmarkIndex]) {
                 continue;
             }
 
-            // Destination reached
-            if (currentNode.id == end) {
-                return new RecordPath(previous, start, end, graph, "From, " + start + " To, " + end, currentDistance);
-            }
+            // Gotta do this till all nodes explore, so no if to stop.
 
             // Explore
             for (Edge edge : currentNode.edges) {
@@ -47,12 +45,11 @@ public class Dijkstras {
                 int newDistance = currentDistance + edge.length;
 
                 // All unvisted nodes have infinity distances:
-                int oldDist = distances.getOrDefault(neigboringId, Integer.MAX_VALUE);
+                int oldDist = distancesFrom[neigboringId][landmarkIndex];
 
                 // Unvisted nodes have inf distance, so it updates. If the new calculated distance is smaller than old, replace it with new distance.
                 if (newDistance < oldDist) {
-                    distances.put(neigboringId, newDistance);
-                    previous.put(neigboringId, currentNode.id);
+                    distancesFrom[neigboringId][landmarkIndex] = newDistance;
                     Node neighbor = graph.getNode(neigboringId);
                     Pq.add(new QueueEntry(neighbor, newDistance));
                 }
@@ -79,8 +76,6 @@ public class Dijkstras {
         Map<Integer, Integer> distances = new HashMap<>();
         // id of node, node
         Map<Integer, Integer> previous = new HashMap<>();
-        record QueueEntry(Node node, int distance) {
-        }
 
         PriorityQueue<QueueEntry> Pq = new PriorityQueue<>(Comparator.comparingInt(QueueEntry::distance));
         ArrayList<RecordPath> listOfPaths = new ArrayList<>();
