@@ -9,7 +9,7 @@ public class Node {
     public final double latitude;
     public final double longitude;
     public byte POICode;
-    public String POI = "";
+    public String POI = " ";
     /* POI codes:
     Bit     Betyr           Eksempler
     1       Stedsnavn       Trondheim, Moholt, …

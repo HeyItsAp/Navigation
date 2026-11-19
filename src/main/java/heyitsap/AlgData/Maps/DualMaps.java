@@ -51,14 +51,14 @@ public class DualMaps {
             JPanel labelsA = new JPanel();
             labelsA.setLayout(new BoxLayout(labelsA, BoxLayout.Y_AXIS));
 
-            JLabel titleA = new JLabel("List A - " + listA.size() + " paths",SwingConstants.CENTER);
+            JLabel titleA = new JLabel("List A - " + listA.size() + " paths. Start Node Nr. " + listA.getFirst().start,SwingConstants.CENTER);
             titleA.setAlignmentX(Component.CENTER_ALIGNMENT);
             labelsA.add(titleA);
 
             int j = 0;
             for (RecordPath A : listA) {
                 j++;
-                JLabel label = new JLabel(j + ": " + A.processedNodes);
+                JLabel label = new JLabel(j + "(" + A.graph.getNode(A.end).POI + "): " + A.processedNodes, SwingUtilities.CENTER);
                 label.setAlignmentX(Component.CENTER_ALIGNMENT);
                 labelsA.add(label);
             }
@@ -73,13 +73,13 @@ public class DualMaps {
             JPanel labelsB = new JPanel();
             labelsB.setLayout(new BoxLayout(labelsB, BoxLayout.Y_AXIS));
 
-            JLabel titleB = new JLabel("List B - " + listB.size() + " paths",SwingConstants.CENTER);
+            JLabel titleB = new JLabel("List B - " + listB.size() + " paths. Start Node Nr. " + listB.getFirst().start,SwingConstants.CENTER);
             titleB.setAlignmentX(Component.CENTER_ALIGNMENT);
             labelsB.add(titleB);
             int i = 0;
             for (RecordPath B : listB){
                 i++;
-                JLabel label = new JLabel(i + ": " + B.processedNodes);
+                JLabel label = new JLabel(i + "(" + B.graph.getNode(B.end).POI + "): " + B.processedNodes, SwingUtilities.CENTER);
                 label.setAlignmentX(Component.CENTER_ALIGNMENT);
                 labelsB.add(label);
             }

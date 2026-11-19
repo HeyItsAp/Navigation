@@ -33,7 +33,6 @@ public class DatasettManager {
                 if (line.isEmpty()) continue;
 
                 String[] splittedLine = hsplit(line, 3);
-                System.out.println(splittedLine[0] + " " + splittedLine[1] + " " + splittedLine[2]);
                 int nodeId = Integer.parseInt(splittedLine[0]);
                 double latitude = Double.parseDouble(splittedLine[1]);
                 double longitude = Double.parseDouble(splittedLine[2]);
@@ -43,6 +42,7 @@ public class DatasettManager {
             System.out.println("Reading Success!!");
 
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
         return graph;
@@ -78,6 +78,7 @@ public class DatasettManager {
             System.out.println("Reading Success!!");
 
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
         return graph;
@@ -110,6 +111,7 @@ public class DatasettManager {
                 System.out.println("Reading Success!!");
 
             } catch (IOException e) {
+                System.out.println(e.getMessage());
                 throw new RuntimeException(e);
             }
         return graph;

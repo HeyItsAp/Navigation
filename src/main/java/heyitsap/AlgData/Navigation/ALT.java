@@ -31,7 +31,7 @@ public class ALT {
         int[][] distancesFrom;
         if (dedicatedFile.exists()){
             try (BufferedReader br = new BufferedReader(new FileReader(dedicatedFile))){
-                System.out.println("Reading throught From landsmarks file");
+                System.out.println("== Reading throught From landsmarks file: " + (From ? "From Landmark Distances" : "To Landmark Distances ==") );
                 String infoLine = br.readLine();
                 if (infoLine == null){
                     throw new IllegalArgumentException("File exists but might be empty");
@@ -84,7 +84,7 @@ public class ALT {
 
         if (!check){
             // Calculating Shi
-            System.out.println("No file with content, calculating new distances...");
+            System.out.println("= No file with content, calculating new distances... = ");
             int nodeCount = graph.getNodes().size();
 
             // Assumes node IDs range from 0 to nodeCount - 1
@@ -102,7 +102,7 @@ public class ALT {
                 int landmarkId = landmarks[i];
 
                 System.out.println(
-                        "Processing landmark: " + landmarkId
+                        "Processing landmark nr: " + landmarkId
                 );
 
                 Dijkstras.DijsktrasFromLandsmarks(
