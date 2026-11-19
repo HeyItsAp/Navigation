@@ -25,6 +25,9 @@ public class ALT {
         if (FromLandmarks.exists()){
             try (BufferedReader br = new BufferedReader(new FileReader(FromLandmarks))){
                 String countLine = br.readLine();
+                if (countLine == null){
+                    throw new IllegalArgumentException("File exists but might be empty");
+                }
                 countLine.trim();
                 int nodeCount = Integer.parseInt(countLine);
                 if (nodeCount != graph.getNodes().size()){
