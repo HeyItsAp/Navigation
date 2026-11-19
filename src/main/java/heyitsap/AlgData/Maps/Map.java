@@ -3,6 +3,7 @@ package heyitsap.AlgData;
 import javax.swing.*;
 
 import heyitsap.AlgData.Navigation.RecordPath;
+import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Objects.Node;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -91,6 +92,53 @@ public class Map {
                 map.setZoom(Math.max(0, map.getZoom() - 1));
             } else if (coordinates.size() == 1) {
                 map.setDisplayPosition(coordinates.get(0), 15);
+            }
+        });
+    }
+    public static void showGraph(Graph graph) {
+
+        SwingUtilities.invokeLater(() -> {
+
+            JFrame frame = new JFrame("Graph Nodes");
+            frame.setSize(1000, 700);
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.setLocationRelativeTo(null);
+
+            JMapViewer map = new JMapViewer();
+            frame.add(map);
+
+            // Display every node in the graph
+            for (int key : graph.getNodes().keySet()){
+                Node node = graph.getNode(key);
+                int nodeId = key;
+
+                Coordinate coordinate = new Coordinate(
+                        node.latitude,
+                        node.longitude
+                );
+
+                // Marker with node number as its label
+                MapMarkerDot marker = new MapMarkerDot(
+                        String.valueOf(nodeId),
+                        coordinate
+                );
+
+                map.addMapMarker(marker);
+            }
+
+            frame.setVisible(true);
+
+            // Automatically center and zoom the map
+            if (graph.size() > 1) {
+                map.setDisplayToFitMapMarkers();
+            } else if (graph.size() == 1) {
+                Node node = graph.getNodes()
+                        .values().iterator().next();
+
+                map.setDisplayPosition(
+                        new Coordinate(node.latitude, node.longitude),
+                        15
+                );
             }
         });
     }
