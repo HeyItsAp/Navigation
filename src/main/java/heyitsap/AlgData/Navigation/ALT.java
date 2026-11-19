@@ -1,11 +1,12 @@
 package heyitsap.AlgData.Navigation;
 
 import heyitsap.AlgData.Objects.Graph;
+import heyitsap.AlgData.Objects.Node;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
+import java.util.*;
 
 import static heyitsap.AlgData.DatasettManager.hsplit;
 
@@ -21,6 +22,8 @@ public class ALT {
     public static File FromLandmarks = new File("Resources/FromLandmarks.txt");
     public static File ToLandmarks = new File("Resources/ToLandmarks.txt");
 
+    // Node, g(v), g(v) + h(v)
+    record QueueEntry(Node node, int distance, int priority){}
 
     /* if From is true; read and write to FromLandsmarks. If not; read and write to ToLandsmarks.txt */
     public static int[][] PreprossesingLandmarks(Graph graph, int nodeNr, int[] landmarks, boolean From){
@@ -159,7 +162,38 @@ public class ALT {
 
     }
 
-    public static RecordPath ALTUntilXAmountPOI(Graph graph, int start, int POICode, int amount){
-        return null;
+    public static ArrayList<RecordPath> ALTUntilXAmountPOI(Graph graph, int start, int POICode, int amount, int[] landmarks){
+        Node startNode = graph.getNode(start);
+        int length = graph.getNodes().size();
+
+        // id of node, node
+        Map<Integer, Integer> previous = new HashMap<>();
+
+        // Open list:
+        PriorityQueue<QueueEntry> Pq = new PriorityQueue<QueueEntry>(Comparator.comparingInt(QueueEntry::priority));
+        // Closed list: id of node, distance
+        ArrayList<RecordPath> listOfPaths = new ArrayList<>();
+        Map<Integer, Integer> distances = new HashMap<>();
+
+        // Get preprossesed tables
+        int[][] distancesFrom = PreprossesingLandmarks(graph, start, islandLandmarks, true);
+        int[][] distancesTo = PreprossesingLandmarks(graph.reverseGraph(), start, islandLandmarks, false);
+
+        int processednodes = 0;
+
+        distances.put(start, 0);
+        Pq.offer(new QueueEntry(startNode, 0, ));
+
+        while (!Pq.isEmpty()){
+            QueueEntry entry = Pq.poll();
+            Node currentNode = entry.node();
+
+        }
+        return listOfPaths;
+    }
+
+
+;   public static int EstimatedDistance(){
+
     }
 }
