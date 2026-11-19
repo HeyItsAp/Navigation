@@ -174,8 +174,8 @@ public class ALT {
         Arrays.fill(minFrom, INF);
 
         for (Node node : graph.getNodes().values()) {
-            if (!matchesPOI(node, POICode)) {
-                continue;
+            if (!((node.POICode & POICode) == POICode)) {
+                    continue;
             }
 
             for (int i = 0; i < landmarkCount; i++) {
@@ -196,9 +196,6 @@ public class ALT {
         return new POIBound(minFrom, maxTo);
     }
 
-    private static boolean matchesPOI(Node node, int poiCode) {
-        return (node.POICode & poiCode) == 0;
-    }
 
 
     private static int POIHeuristic(int nodeId, int[][] distancesFrom, int[][] distancesTo, POIBound bounds) {
@@ -266,14 +263,12 @@ public class ALT {
             }
             processednodes++;
 
-            // Check whether this is a matching POI
-            if (matchesPOI(currentNode, POICode)) {
-                RecordPath path = new RecordPath(previous, start, currentNode.id,graph, "ALT", processednodes);
-                listOfPaths.add(path);
-
-                // Stop after finding enough POIs
-                if (listOfPaths.size() >= amount) {
-                    break;
+            // Destination reached
+            if (listOfPaths.size() == amount){
+                return listOfPaths;
+            } else {
+                if ((currentNode.POICode & POICode) == POICode) {
+                    listOfPaths.add(new RecordPath(previous,start,currentNode.id,graph,"Dijkstra",processednodes));
                 }
             }
 
@@ -300,11 +295,7 @@ public class ALT {
                     // ALT priority
                     int priority = newDist + h;
 
-                    Pq.offer(new QueueEntry(
-                            neighbor,
-                            newDist,
-                            priority
-                    ));
+                    Pq.offer(new QueueEntry(neighbor, newDist, priority));
                 }
             }
         }
