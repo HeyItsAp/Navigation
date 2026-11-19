@@ -163,6 +163,45 @@ public class ALT {
 
     }
 
+    private record POIBound(int[] minFrom, int[] maxTo){ }
+    private static POIBound calculatePOIBounds(Graph graph, int POICode, int[][] distancesFrom, int[][] distancesTo) {
+        int landmarkCount = distancesFrom[0].length;
+        int INF = Integer.MAX_VALUE;
+
+        int[] minFrom = new int[landmarkCount];
+        int[] maxTo = new int[landmarkCount];
+
+        Arrays.fill(minFrom, INF);
+
+        for (Node node : graph.getNodes().values()) {
+            if (!matchesPOI(node, POICode)) {
+                continue;
+            }
+
+            for (int i = 0; i < landmarkCount; i++) {
+
+                int from = distancesFrom[node.id][i];
+                int to = distancesTo[node.id][i];
+
+                if (from != INF) {
+                    minFrom[i] = Math.min(minFrom[i], from);
+                }
+
+                if (to == INF) {
+                    maxTo[i] = INF;
+                } else if (maxTo[i] != INF) {
+                    maxTo[i] = Math.max(maxTo[i], to);
+                }
+            }
+        }
+
+        return new POIBound(minFrom, maxTo);
+    }
+
+    private static boolean matchesPOI(Node node, int poiCode) {
+        return (node.POICode & poiCode) == 0;
+    }
+
     public static ArrayList<RecordPath> ALTUntilXAmountPOI(Graph graph, int start, int POICode, int amount, int[] landmarks){
         Node startNode = graph.getNode(start);
         int length = graph.getNodes().size();
