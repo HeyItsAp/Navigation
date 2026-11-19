@@ -22,10 +22,9 @@ public class Main {
         }
 
         try {
-            ArrayList<RecordPath> paths = Dijkstras.DijsktrasUntilXAmountPOI(graph, 205, 8, 5);
-            DualMaps.showTwoPathLists(paths, paths);
-            ALT.PreprossesingLandmarks(graph,333, ALT.islandLandmarks, true);
-            ALT.PreprossesingLandmarks(graph.reverseGraph(),333, ALT.islandLandmarks, false);
+            ArrayList<RecordPath> paths = Dijkstras.DijsktrasUntilXAmountPOI(graph, 205, 8, 2);
+            ArrayList<RecordPath> paths2 = ALT.ALTUntilXAmountPOI(graph, 205, 8, 2, ALT.islandLandmarks);
+            DualMaps.showTwoPathLists(paths, paths2);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
