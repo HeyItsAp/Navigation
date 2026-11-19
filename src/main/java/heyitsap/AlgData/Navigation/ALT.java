@@ -42,13 +42,13 @@ public class ALT {
 
                 check = true;
                 String line;
-                System.out.println("Looping through each line:");
+                System.out.println("Looping through each line");
                 while ((line = br.readLine()) != null){
                     line = line.trim();
                     if (line.isEmpty()) continue;
 
                     String[] splittedLine = hsplit(line, countLandmarks);
-                    if (splittedLine.length-1 != countLandmarks){
+                    if (splittedLine.length != countLandmarks){
                         throw new IllegalArgumentException("Not coherent Landmark files (1, landmark count): Files: " + (splittedLine.length-1) + ", Input: " + countLandmarks);
 
                     }
@@ -60,7 +60,7 @@ public class ALT {
                     }
 
                     for (int i = 0; i < countLandmarks; i++) {
-                        distancesFrom[nodeId][i] = Integer.parseInt(splittedLine[i + 1]);
+                        distancesFrom[nodeId][i] = Integer.parseInt(splittedLine[i]);
                     }
                 }
                 System.out.println("Reading Success!!");
