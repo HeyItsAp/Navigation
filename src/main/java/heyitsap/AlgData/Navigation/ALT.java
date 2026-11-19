@@ -179,7 +179,6 @@ public class ALT {
             }
 
             for (int i = 0; i < landmarkCount; i++) {
-
                 int from = distancesFrom[node.id][i];
                 int to = distancesTo[node.id][i];
 
@@ -194,7 +193,6 @@ public class ALT {
                 }
             }
         }
-
         return new POIBound(minFrom, maxTo);
     }
 
@@ -203,80 +201,112 @@ public class ALT {
     }
 
 
-    private static long POIHeuristic(
-            int nodeId,
-            int[][] distancesFrom,
-            int[][] distancesTo,
-            POIBound bounds) {
-
-        long h = 0;
+    private static int POIHeuristic(int nodeId, int[][] distancesFrom, int[][] distancesTo, POIBound bounds) {
+        int h = 0;
         int INF = Integer.MAX_VALUE;
 
         for (int i = 0; i < bounds.minFrom.length; i++) {
-
             int fromNode = distancesFrom[nodeId][i];
             int toNode = distancesTo[nodeId][i];
 
             // Lower bound using FROM landmarks
-            if (fromNode != INF &&
-                    bounds.minFrom[i] != INF) {
-
-                long estimate =
-                        (long) bounds.minFrom[i] - fromNode;
-
+            if (fromNode != INF && bounds.minFrom[i] != INF) {
+                int estimate = bounds.minFrom[i] - fromNode;
                 h = Math.max(h, estimate);
             }
 
             // Lower bound using TO landmarks
-            if (toNode != INF &&
-                    bounds.maxTo[i] != INF) {
-
-                long estimate =
-                        (long) toNode - bounds.maxTo[i];
-
+            if (toNode != INF && bounds.maxTo[i] != INF) {
+                int estimate = toNode - bounds.maxTo[i];
                 h = Math.max(h, estimate);
             }
         }
-
         return h;
     }
 
 
     public static ArrayList<RecordPath> ALTUntilXAmountPOI(Graph graph, int start, int POICode, int amount, int[] landmarks){
         Node startNode = graph.getNode(start);
-        int length = graph.getNodes().size();
+        ArrayList<RecordPath> listOfPaths = new ArrayList<>();
+        if (amount <= 0) return listOfPaths;
+        int processednodes = 0;
 
         // id of node, node
         Map<Integer, Integer> previous = new HashMap<>();
-
         // Open list:
         PriorityQueue<QueueEntry> Pq = new PriorityQueue<QueueEntry>(Comparator.comparingInt(QueueEntry::priority));
         // Closed list: id of node, distance
-        ArrayList<RecordPath> listOfPaths = new ArrayList<>();
         Map<Integer, Integer> distances = new HashMap<>();
 
         // Get preprossesed tables
-        int[][] distancesFrom = PreprossesingLandmarks(graph, start, islandLandmarks, true);
-        int[][] distancesTo = PreprossesingLandmarks(graph.reverseGraph(), start, islandLandmarks, false);
+        int[][] distancesFrom = PreprossesingLandmarks(graph, start, landmarks, true);
+        int[][] distancesTo = PreprossesingLandmarks(graph.reverseGraph(), start, landmarks, false);
 
-        int processednodes = 0;
+
+        // Calculate heuristic bounds for this POI category
+        POIBound bounds = calculatePOIBounds(
+                graph, POICode, distancesFrom, distancesTo
+        );
 
         distances.put(start, 0);
+        int startH = POIHeuristic(
+                start, distancesFrom, distancesTo, bounds
+        );
 
-        int startHeuristic = 0; // BLACNK
+        Pq.offer(new QueueEntry(startNode, 0, startH));
 
-        Pq.offer(new QueueEntry(
-                startNode, 0, startHeuristic
-        ));
-
-
-        Pq.offer(new QueueEntry(
-                startNode, 0, startHeuristic
-        ));
         while (!Pq.isEmpty()){
             QueueEntry entry = Pq.poll();
             Node currentNode = entry.node();
+            int currentLength = entry.distance();
 
+            // Skip outdated entries
+            if (currentLength != distances.getOrDefault(currentNode.id, Integer.MAX_VALUE)) {
+                continue;
+            }
+            processednodes++;
+
+            // Check whether this is a matching POI
+            if (matchesPOI(currentNode, POICode)) {
+                RecordPath path = new RecordPath(previous, start, currentNode.id,graph, "ALT", processednodes);
+                listOfPaths.add(path);
+
+                // Stop after finding enough POIs
+                if (listOfPaths.size() >= amount) {
+                    break;
+                }
+            }
+
+            // Explore neighbors
+            for (Edge edge : currentNode.edges) {
+                int neighborId = edge.to.id;
+                int weight= edge.length;
+
+                if (weight < 0) {
+                    throw new IllegalArgumentException("Negative edge weight");
+                }
+
+                int newDist = currentLength + weight;
+                int oldDist = distances.getOrDefault(neighborId, Integer.MAX_VALUE);
+
+                if (newDist < oldDist) {
+                    distances.put(neighborId, newDist);
+                    previous.put(neighborId, currentNode.id);
+                    Node neighbor = graph.getNode(neighborId);
+
+                    // Calculate heuristic for this neighbor
+                    int h = POIHeuristic(neighborId, distancesFrom, distancesTo, bounds);
+
+                    // ALT priority
+                    int priority = newDist + h;
+
+                    Pq.offer(new QueueEntry(
+                            neighbor,
+                            newDist,
+                            priority
+                    ));
+                }
+            }
         }
         return listOfPaths;
     }
@@ -324,7 +354,7 @@ public class ALT {
 
         // ALT sorts by g(v) + h(v)
         PriorityQueue<QueueEntry> pq = new PriorityQueue<>(
-                Comparator.comparingLong(QueueEntry::priority)
+                Comparator.comparingInt(QueueEntry::priority)
         );
 
         int[][] distancesFrom = PreprossesingLandmarks(graph,start,landmarks,true);
