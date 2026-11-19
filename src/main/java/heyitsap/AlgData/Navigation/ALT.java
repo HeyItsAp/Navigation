@@ -230,13 +230,7 @@ public class ALT {
         }
         return h;
     }
-    public static RecordPath shortestPath(
-            Graph graph,
-            int start,
-            int end,
-            int[][] distancesFrom,
-            int[][] distancesTo) {
-
+    public static RecordPath RegularALT(Graph graph,int start, int end, int[] landmarks) {
         Node startNode = graph.getNode(start);
         Node endNode = graph.getNode(end);
 
@@ -254,17 +248,15 @@ public class ALT {
                 Comparator.comparingLong(QueueEntry::priority)
         );
 
+        int[][] distancesFrom = PreprossesingLandmarks(graph,start,landmarks,true);
+        int[][] distancesTo = PreprossesingLandmarks(graph.reverseGraph(),start,landmarks,false);
         int processednodes = 0;
 
         distances.put(start, 0);
 
-        int startHeuristic = EstimatedDistance(
-                start, end, distancesFrom, distancesTo
-        );
+        int startHeuristic = EstimatedDistance(start, end, distancesFrom, distancesTo);
 
-        pq.offer(new QueueEntry(
-                startNode, 0, startHeuristic
-        ));
+        pq.offer(new QueueEntry(startNode, 0, startHeuristic));
 
         while (!pq.isEmpty()) {
             QueueEntry entry = pq.poll();
@@ -272,8 +264,7 @@ public class ALT {
             int currentDist = entry.distance();
 
             // Ignore outdated queue entries
-            if (currentDist != distances.getOrDefault(
-                    currentNode.id, Integer.MAX_VALUE)) {
+            if (currentDist != distances.getOrDefault(currentNode.id, Integer.MAX_VALUE)) {
                 continue;
             }
 
@@ -286,20 +277,15 @@ public class ALT {
 
             // Explore outgoing edges
             for (Edge edge : currentNode.edges) {
-
                 int neighborId = edge.to.id;
                 int length = edge.length;
 
                 if (length < 0) {
-                    throw new IllegalArgumentException(
-                            "Negative edge weight"
-                    );
+                    throw new IllegalArgumentException("Negative edge weight");
                 }
 
                 if (currentDist > Integer.MAX_VALUE - length) {
-                    throw new ArithmeticException(
-                            "Distance overflow"
-                    );
+                    throw new ArithmeticException("Distance overflow");
                 }
 
                 int newDist = currentDist + length;
@@ -310,28 +296,18 @@ public class ALT {
 
                 // Found a shorter path
                 if (newDist < oldDist) {
-
                     distances.put(neighborId, newDist);
                     previous.put(neighborId, currentNode.id);
 
                     Node neighbor = graph.getNode(neighborId);
 
                     // Calculate ALT heuristic
-                    int h = EstimatedDistance(
-                            neighborId,
-                            end,
-                            distancesFrom,
-                            distancesTo
-                    );
+                    int h = EstimatedDistance(neighborId, end, distancesFrom, distancesTo);
 
                     // f(v) = g(v) + h(v)
                     int priority = newDist + h;
 
-                    pq.offer(new QueueEntry(
-                            neighbor,
-                            newDist,
-                            priority
-                    ));
+                    pq.offer(new QueueEntry(neighbor, newDist, priority));
                 }
             }
         }
