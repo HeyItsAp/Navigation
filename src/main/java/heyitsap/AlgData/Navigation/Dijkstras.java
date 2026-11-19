@@ -100,7 +100,7 @@ public class Dijkstras {
                 return listOfPaths;
             } else {
                 if ((currentNode.POICode & POICode) == POICode) {
-                    listOfPaths.add(new RecordPath(previous,start,currentNode.id,graph," ",processednodes));
+                    listOfPaths.add(new RecordPath(previous,start,currentNode.id,graph,"Dijkstra",processednodes));
                 }
             }
 

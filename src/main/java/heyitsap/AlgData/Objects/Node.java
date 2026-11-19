@@ -37,7 +37,7 @@ public class Node {
     }
 
     public void setPOI(byte POICode, String POI){
-        this.POI += (" " + POI);
+        this.POI += (POI);
         this.POICode += POICode;
     }
 }
