@@ -10,7 +10,7 @@ public class Dijkstras {
 
     record QueueEntry(Node node, int distance) {}
     /* Underdeveloped / Forgetton*/
-    public static int[][] DijsktrasFromLandsmarks(Graph graph, int start, int landmarkIndex, int[][] distancesFrom) {
+    public static void DijsktrasFromLandsmarks(Graph graph, int start, int landmarkIndex, int[][] distancesFrom) {
         Node startNode = graph.getNode(start);
         if (startNode == null) {
             throw new IllegalArgumentException(
@@ -55,7 +55,6 @@ public class Dijkstras {
                 }
             }
         }
-        return null;
     }
 
     /* POI codes:

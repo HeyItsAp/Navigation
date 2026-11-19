@@ -18,6 +18,7 @@ public class ALT {
     public static int[][] PreprossesingFromLandmarks(Graph graph, int nodeNr, int[] landmarks){
         File FromLandmarks = new File("Resources/FromLandmarks.txt");
         boolean check = false;
+        int countLandmarks = landmarks.length;
 
         int[][] distancesFrom;
         if (FromLandmarks.exists()){
@@ -54,7 +55,7 @@ public class ALT {
                     }
                 }
                 System.out.println("Reading Success!!");
-
+                return distancesFrom;
             } catch (IllegalArgumentException _){
                 check = false;
             } catch (IOException e) {
@@ -64,7 +65,6 @@ public class ALT {
 
         if (!check){
             int nodeCount = graph.getNodes().size();
-            int countLandmarks = landmarks.length;
 
             // Assumes node IDs range from 0 to nodeCount - 1
             distancesFrom = new int[nodeCount][countLandmarks];
@@ -82,7 +82,7 @@ public class ALT {
                         "Processing landmark: " + landmarkId
                 );
 
-                dijkstraFromLandmark(
+                Dijkstras.DijsktrasFromLandsmarks(
                         graph, landmarkId, i, distancesFrom
                 );
             }
