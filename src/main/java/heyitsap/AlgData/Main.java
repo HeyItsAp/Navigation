@@ -1,15 +1,10 @@
 package heyitsap.AlgData;
 
 
-import heyitsap.AlgData.Map;
-import heyitsap.AlgData.Maps.DualMaps;
 import heyitsap.AlgData.Navigation.ALT;
-import heyitsap.AlgData.Navigation.Dijkstras;
-import heyitsap.AlgData.Navigation.RecordPath;
 import heyitsap.AlgData.Objects.Graph;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Main {
     static void main() {
@@ -26,7 +21,8 @@ public class Main {
         try {
             //ArrayList<RecordPath> paths = Dijkstras.DijsktrasUntilXAmountPOI(graph, 205, 8, 5);
             //DualMaps.showTwoPathLists(paths, paths);
-            ALT.PreprossesingFromLandmarks(graph, 126, ALT.islandLandmarks);
+            ALT.PreprossesingLandmarks(graph,333, ALT.islandLandmarks, true);
+            ALT.PreprossesingLandmarks(graph.reverseGraph(),333, ALT.islandLandmarks, false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
