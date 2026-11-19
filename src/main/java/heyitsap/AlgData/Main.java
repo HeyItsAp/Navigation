@@ -3,6 +3,7 @@ package heyitsap.AlgData;
 
 import heyitsap.AlgData.Map;
 import heyitsap.AlgData.Maps.DualMaps;
+import heyitsap.AlgData.Navigation.ALT;
 import heyitsap.AlgData.Navigation.Dijkstras;
 import heyitsap.AlgData.Navigation.RecordPath;
 import heyitsap.AlgData.Objects.Graph;
@@ -25,7 +26,7 @@ public class Main {
         try {
             //ArrayList<RecordPath> paths = Dijkstras.DijsktrasUntilXAmountPOI(graph, 205, 8, 5);
             //DualMaps.showTwoPathLists(paths, paths);
-            Map.showGraph(graph);
+            ALT.PreprossesingFromLandmarks(graph, 126, ALT.islandLandmarks);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
