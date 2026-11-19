@@ -2,10 +2,9 @@ package heyitsap.AlgData.Navigation;
 
 import heyitsap.AlgData.Objects.Graph;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 
 import static heyitsap.AlgData.DatasettManager.hsplit;
@@ -14,9 +13,11 @@ import static heyitsap.AlgData.DatasettManager.hsplit;
 public class ALT {
     public static int[] islandLandmarks = {22957, 31542};
     public static int[] nordenLandmarks;
+    public static Path outputFolder = Path.of("Resources");
+    public static File FromLandmarks = new File("Resources/FromLandmarks.txt");
+
 
     public static int[][] PreprossesingFromLandmarks(Graph graph, int nodeNr, int[] landmarks){
-        File FromLandmarks = new File("Resources/FromLandmarks.txt");
         boolean check = false;
         int countLandmarks = landmarks.length;
 
@@ -64,6 +65,7 @@ public class ALT {
         }
 
         if (!check){
+            // Calculating Shi
             int nodeCount = graph.getNodes().size();
 
             // Assumes node IDs range from 0 to nodeCount - 1
@@ -86,6 +88,46 @@ public class ALT {
                         graph, landmarkId, i, distancesFrom
                 );
             }
+
+            // Writing to file.
+            try {
+                Files.createDirectories(outputFolder);
+                File FromLandmarks = new File("Resources/FromLandmarks.txt");
+
+                try (BufferedWriter bw = new BufferedWriter(
+                        new FileWriter(FromLandmarks))) {
+
+                    // First line: number of nodes
+                    bw.write(Integer.toString(distancesFrom.length));
+                    bw.newLine();
+
+                    // Write each node and its landmark distances
+                    for (int nodeId = 0; nodeId < distancesFrom.length; nodeId++) {
+
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(nodeId);
+
+                        for (int landmark = 0;
+                             landmark < distancesFrom[nodeId].length;
+                             landmark++) {
+
+                            sb.append(" ")
+                                    .append(distancesFrom[nodeId][landmark]);
+                        }
+
+                        bw.write(sb.toString());
+                        bw.newLine();
+                    }
+                }
+
+                System.out.println("Distances from landmark file saved");
+
+            } catch (IOException e) {
+                throw new RuntimeException(
+                        "Failed to write landmark file", e
+                );
+            }
+
 
             return distancesFrom;
         }
