@@ -24,6 +24,7 @@ public class ALT {
         int[][] distancesFrom;
         if (FromLandmarks.exists()){
             try (BufferedReader br = new BufferedReader(new FileReader(FromLandmarks))){
+                System.out.println("Reading throught From landsmarks file");
                 String countLine = br.readLine();
                 if (countLine == null){
                     throw new IllegalArgumentException("File exists but might be empty");
@@ -35,10 +36,13 @@ public class ALT {
                 }
 
                 distancesFrom = new int[nodeCount][countLandmarks];
-                Arrays.fill(distancesFrom, Integer.MAX_VALUE);
+                for (int[] row : distancesFrom) {
+                    Arrays.fill(row, Integer.MAX_VALUE);
+                }
 
                 check = true;
                 String line;
+                System.out.println("Looping through each line:");
                 while ((line = br.readLine()) != null){
                     line = line.trim();
                     if (line.isEmpty()) continue;
@@ -69,6 +73,7 @@ public class ALT {
 
         if (!check){
             // Calculating Shi
+            System.out.println("No file with content, calculating new distances...");
             int nodeCount = graph.getNodes().size();
 
             // Assumes node IDs range from 0 to nodeCount - 1
@@ -78,6 +83,8 @@ public class ALT {
             for (int[] row : distancesFrom) {
                 Arrays.fill(row, Integer.MAX_VALUE);
             }
+
+            System.out.println("Running Dijkstra...");
 
             // Run Dijkstra once for each landmark
             for (int i = 0; i < countLandmarks; i++) {
@@ -91,6 +98,8 @@ public class ALT {
                         graph, landmarkId, i, distancesFrom
                 );
             }
+            System.out.println("Finished Dijkstra");
+            System.out.println("Attempting to write...");
 
             // Writing to file.
             try {
@@ -106,6 +115,8 @@ public class ALT {
 
                     // Write each node and its landmark distances
                     for (int nodeId = 0; nodeId < distancesFrom.length; nodeId++) {
+                        System.out.println("Writing to write nodeId; "+ nodeId);
+
 
                         StringBuilder sb = new StringBuilder();
                         sb.append(nodeId);
