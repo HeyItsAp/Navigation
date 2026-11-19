@@ -1,5 +1,6 @@
 package heyitsap.AlgData.Navigation;
 
+import heyitsap.AlgData.Objects.Edge;
 import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Objects.Node;
 
@@ -182,8 +183,17 @@ public class ALT {
         int processednodes = 0;
 
         distances.put(start, 0);
-        Pq.offer(new QueueEntry(startNode, 0, ));
 
+        int startHeuristic = 0; // BLACNK
+
+        Pq.offer(new QueueEntry(
+                startNode, 0, startHeuristic
+        ));
+
+
+        Pq.offer(new QueueEntry(
+                startNode, 0, startHeuristic
+        ));
         while (!Pq.isEmpty()){
             QueueEntry entry = Pq.poll();
             Node currentNode = entry.node();
@@ -193,7 +203,7 @@ public class ALT {
     }
 
 
-;   public static int EstimatedDistance(int nodeId, int targetId, int[][] from, int[][] to){
+    public static int EstimatedDistance(int nodeId, int targetId, int[][] from, int[][] to){
         // prioirty thing f
         int h = 0;
         for (int i = 0; i < from[nodeId].length; i++) {
@@ -215,9 +225,118 @@ public class ALT {
                     targetToLandmark != Integer.MAX_VALUE) {
 
                 h = Math.max(h,
-                        (nodeToLandmark - targetToLandmark);
+                        (nodeToLandmark - targetToLandmark));
             }
         }
         return h;
+    }
+    public static RecordPath shortestPath(
+            Graph graph,
+            int start,
+            int end,
+            int[][] distancesFrom,
+            int[][] distancesTo) {
+
+        Node startNode = graph.getNode(start);
+        Node endNode = graph.getNode(end);
+
+        if (startNode == null || endNode == null) {
+            throw new IllegalArgumentException("Invalid node ID");
+        }
+
+        // id of node, distance
+        Map<Integer, Integer> distances = new HashMap<>();
+        // id of node, node
+        Map<Integer, Integer> previous = new HashMap<>();
+
+        // ALT sorts by g(v) + h(v)
+        PriorityQueue<QueueEntry> pq = new PriorityQueue<>(
+                Comparator.comparingLong(QueueEntry::priority)
+        );
+
+        int processednodes = 0;
+
+        distances.put(start, 0);
+
+        int startHeuristic = EstimatedDistance(
+                start, end, distancesFrom, distancesTo
+        );
+
+        pq.offer(new QueueEntry(
+                startNode, 0, startHeuristic
+        ));
+
+        while (!pq.isEmpty()) {
+            QueueEntry entry = pq.poll();
+            Node currentNode = entry.node();
+            int currentDist = entry.distance();
+
+            // Ignore outdated queue entries
+            if (currentDist != distances.getOrDefault(
+                    currentNode.id, Integer.MAX_VALUE)) {
+                continue;
+            }
+
+            processednodes++;
+
+            // Destination found
+            if (currentNode.id == end) {
+                return new RecordPath(previous, start, end, graph, "ALT", processednodes);
+            }
+
+            // Explore outgoing edges
+            for (Edge edge : currentNode.edges) {
+
+                int neighborId = edge.to.id;
+                int length = edge.length;
+
+                if (length < 0) {
+                    throw new IllegalArgumentException(
+                            "Negative edge weight"
+                    );
+                }
+
+                if (currentDist > Integer.MAX_VALUE - length) {
+                    throw new ArithmeticException(
+                            "Distance overflow"
+                    );
+                }
+
+                int newDist = currentDist + length;
+
+                int oldDist = distances.getOrDefault(
+                        neighborId, Integer.MAX_VALUE
+                );
+
+                // Found a shorter path
+                if (newDist < oldDist) {
+
+                    distances.put(neighborId, newDist);
+                    previous.put(neighborId, currentNode.id);
+
+                    Node neighbor = graph.getNode(neighborId);
+
+                    // Calculate ALT heuristic
+                    int h = EstimatedDistance(
+                            neighborId,
+                            end,
+                            distancesFrom,
+                            distancesTo
+                    );
+
+                    // f(v) = g(v) + h(v)
+                    int priority = newDist + h;
+
+                    pq.offer(new QueueEntry(
+                            neighbor,
+                            newDist,
+                            priority
+                    ));
+                }
+            }
+        }
+
+        // Destination unreachable
+        return null;
     }
 }
