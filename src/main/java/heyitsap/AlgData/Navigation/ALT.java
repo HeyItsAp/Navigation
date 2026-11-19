@@ -9,6 +9,10 @@ import java.util.Arrays;
 
 import static heyitsap.AlgData.DatasettManager.hsplit;
 
+/**
+ * For best calculation and shi remove everything in both txt files. So that it can properly write and stuff. Unexpected lines might bug the system.
+ */
+
 
 public class ALT {
     public static int[] islandLandmarks = {22957, 31542};
@@ -25,14 +29,16 @@ public class ALT {
         if (FromLandmarks.exists()){
             try (BufferedReader br = new BufferedReader(new FileReader(FromLandmarks))){
                 System.out.println("Reading throught From landsmarks file");
-                String countLine = br.readLine();
-                if (countLine == null){
+                String infoLine = br.readLine();
+                if (infoLine == null){
                     throw new IllegalArgumentException("File exists but might be empty");
                 }
-                countLine.trim();
-                int nodeCount = Integer.parseInt(countLine);
-                if (nodeCount != graph.getNodes().size()){
-                    throw new IllegalArgumentException("Not coherent Landmark files (1, Nodecount): Files: " + nodeCount + ", Graph: " + graph.getNodes().size());
+                infoLine.trim();
+                String[] splittedInfoLine = hsplit(infoLine, 2);
+                int nodeCount = Integer.parseInt(splittedInfoLine[0]);
+                int startNodeId = Integer.parseInt(splittedInfoLine[1]);
+                if (startNodeId != nodeNr){
+                    throw new IllegalArgumentException("Not coherent Landmark files (1, startNode): Files: " + startNodeId + ", Input: " + nodeNr);
                 }
 
                 distancesFrom = new int[nodeCount][countLandmarks];
@@ -49,7 +55,7 @@ public class ALT {
 
                     String[] splittedLine = hsplit(line, countLandmarks);
                     if (splittedLine.length != countLandmarks){
-                        throw new IllegalArgumentException("Not coherent Landmark files (1, landmark count): Files: " + (splittedLine.length-1) + ", Input: " + countLandmarks);
+                        throw new IllegalArgumentException("Not coherent Landmark files (3, landmark count): Files: " + (splittedLine.length-1) + ", Input: " + countLandmarks);
 
                     }
 
@@ -112,7 +118,7 @@ public class ALT {
                         new FileWriter(FromLandmarks))) {
 
                     // First line: number of nodes
-                    bw.write(Integer.toString(distancesFrom.length));
+                    bw.write(distancesFrom.length + " " + nodeNr);
                     bw.newLine();
 
                     // Write each node and its landmark distances
