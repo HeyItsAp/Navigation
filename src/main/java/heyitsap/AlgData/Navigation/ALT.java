@@ -268,14 +268,14 @@ public class ALT {
                 return listOfPaths;
             } else {
                 if ((currentNode.POICode & POICode) == POICode) {
-                    listOfPaths.add(new RecordPath(previous,start,currentNode.id,graph,"Dijkstra",processednodes));
+                    listOfPaths.add(new RecordPath(previous,start,currentNode.id,graph,"ALT",processednodes));
                 }
             }
 
             // Explore neighbors
             for (Edge edge : currentNode.edges) {
                 int neighborId = edge.to.id;
-                int weight= edge.length;
+                int weight = edge.length;
 
                 if (weight < 0) {
                     throw new IllegalArgumentException("Negative edge weight");

@@ -52,13 +52,16 @@ public class DualMaps {
             labelsA.setLayout(new BoxLayout(labelsA, BoxLayout.Y_AXIS));
 
             JLabel titleA = new JLabel("List A - " + listA.size() + " paths. Start Node Nr. " + listA.getFirst().start,SwingConstants.CENTER);
+            JLabel titleA2 = new JLabel("StartNodeNr -> EndNodeNr | ProcessedNodes | Nodes in Path | DrivingTime (tt:mm:ss)",SwingConstants.CENTER);
             titleA.setAlignmentX(Component.CENTER_ALIGNMENT);
+            titleA2.setAlignmentX(Component.CENTER_ALIGNMENT);
             labelsA.add(titleA);
+            labelsA.add(titleA2);
 
             int j = 0;
             for (RecordPath A : listA) {
                 j++;
-                JLabel label = new JLabel(j + ": " + A.start + "-> " + A.end + ". (" + A.graph.getNode(A.end).POI, SwingUtilities.CENTER);
+                JLabel label = new JLabel(j + ": " + A.start + "-> " + A.end + " | " + A.processedNodes + " | " + A.graph.size(), SwingUtilities.CENTER);
                 label.setAlignmentX(Component.CENTER_ALIGNMENT);
                 labelsA.add(label);
             }
@@ -74,12 +77,15 @@ public class DualMaps {
             labelsB.setLayout(new BoxLayout(labelsB, BoxLayout.Y_AXIS));
 
             JLabel titleB = new JLabel("List B - " + listB.size() + " paths. Start Node Nr. " + listB.getFirst().start,SwingConstants.CENTER);
+            JLabel titleB2 = new JLabel("StartNodeNr -> EndNodeNr | ProcessedNodes | Nodes in Path | DrivingTime (tt:mm:ss)",SwingConstants.CENTER);
             titleB.setAlignmentX(Component.CENTER_ALIGNMENT);
+            titleB2.setAlignmentX(Component.CENTER_ALIGNMENT);
             labelsB.add(titleB);
+            labelsB.add(titleB2);
             int i = 0;
             for (RecordPath B : listB){
                 i++;
-                JLabel label = new JLabel(i + ": " + B.start + "-> " + B.end + ". (" + B.graph.getNode(B.end).POI, SwingUtilities.CENTER);
+                JLabel label = new JLabel(i + ": " + B.start + "-> " + B.end + " | " + B.processedNodes+ " | " + B.graph.size(), SwingUtilities.CENTER);
                 label.setAlignmentX(Component.CENTER_ALIGNMENT);
                 labelsB.add(label);
             }

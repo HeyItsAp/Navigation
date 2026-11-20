@@ -155,7 +155,7 @@ public class Dijkstras {
 
             // Destination reached
             if (currentNode.id == end) {
-                return new RecordPath(previous, start, end, graph, "From, " + start + " To, " + end, currentDistance);
+                return new RecordPath(previous, start, end, graph, "Dijkstras", currentDistance);
             }
 
             // Explore
