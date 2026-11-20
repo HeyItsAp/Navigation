@@ -3,6 +3,7 @@ package heyitsap.AlgData.Navigation;
 import heyitsap.AlgData.Objects.Edge;
 import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Objects.Node;
+import heyitsap.AlgData.Objects.RecordPath;
 
 import java.util.*;
 
@@ -67,6 +68,7 @@ public class Dijkstras {
     32      Overnattings    Hoteller, moteller, gjestehu
      */
     public static ArrayList<RecordPath> DijsktrasUntilXAmountPOI(Graph graph, int start, int POICode, int amount) {
+        System.out.println("Start Djiktras: Dijkstras Until " + amount + " with POIcode " + POICode + ".");
         Node startNode = graph.getNode(start);
 
 
@@ -81,6 +83,7 @@ public class Dijkstras {
 
         distances.put(start, 0);
         Pq.add(new QueueEntry(startNode, 0));
+        System.out.println("    Beginning Search");
 
         while (!Pq.isEmpty()) {
             QueueEntry entry = Pq.poll();
@@ -96,6 +99,8 @@ public class Dijkstras {
 
             // Destination reached
             if (listOfPaths.size() == amount){
+                System.out.println("    Ending Search");
+                System.out.println("Took: ");
                 return listOfPaths;
             } else {
                 if ((currentNode.POICode & POICode) == POICode) {
@@ -125,6 +130,7 @@ public class Dijkstras {
     }
     /* Underdeveloped / Forgetton*/
     public static RecordPath DijsktrasStartEnd(Graph graph, int start, int end) {
+        System.out.println("Start Djikstras: From " + start + " till " + end + ".");
         Node startNode = graph.getNode(start);
         Node endNode = graph.getNode(end);
 
@@ -141,6 +147,7 @@ public class Dijkstras {
         distances.put(start, 0);
         Pq.add(new QueueEntry(startNode, 0));
 
+        System.out.println("    Beginning Search");
         while (!Pq.isEmpty()) {
             QueueEntry entry = Pq.poll();
             Node currentNode = entry.node;
@@ -153,6 +160,8 @@ public class Dijkstras {
 
             // Destination reached
             if (currentNode.id == end) {
+                System.out.println("    Search Ended");
+                System.out.println("Took: ");
                 return new RecordPath(previous, start, end, graph, "Dijkstras", currentDistance);
             }
 

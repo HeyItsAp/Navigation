@@ -3,6 +3,7 @@ package heyitsap.AlgData.Navigation;
 import heyitsap.AlgData.Objects.Edge;
 import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Objects.Node;
+import heyitsap.AlgData.Objects.RecordPath;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -35,17 +36,17 @@ public class ALT {
         int[][] distancesFrom;
         if (dedicatedFile.exists()){
             try (BufferedReader br = new BufferedReader(new FileReader(dedicatedFile))){
-                System.out.println("== Reading throught From landsmarks file: " + (From ? "From Landmark Distances" : "To Landmark Distances ==") );
+                System.out.println("        Reading throught From landsmarks file: " + (From ? "From Landmark Distances" : "To Landmark Distances") );
                 String infoLine = br.readLine();
                 if (infoLine == null){
-                    throw new IllegalArgumentException("File exists but might be empty");
+                    throw new IllegalArgumentException("        File exists but might be empty");
                 }
                 infoLine.trim();
                 String[] splittedInfoLine = hsplit(infoLine, 2);
                 int nodeCount = Integer.parseInt(splittedInfoLine[0]);
                 int startNodeId = Integer.parseInt(splittedInfoLine[1]);
                 if (startNodeId != nodeNr){
-                    throw new IllegalArgumentException("Not coherent Landmark files (1, startNode): Files: " + startNodeId + ", Input: " + nodeNr);
+                    throw new IllegalArgumentException("        Not coherent Landmark files (1, startNode): Files: " + startNodeId + ", Input: " + nodeNr);
                 }
 
                 distancesFrom = new int[nodeCount][countLandmarks];
@@ -55,28 +56,28 @@ public class ALT {
 
                 check = true;
                 String line;
-                System.out.println("Looping through each line");
+                System.out.println("        Looping through each line");
                 while ((line = br.readLine()) != null){
                     line = line.trim();
                     if (line.isEmpty()) continue;
 
                     String[] splittedLine = hsplit(line, countLandmarks);
                     if (splittedLine.length != countLandmarks){
-                        throw new IllegalArgumentException("Not coherent Landmark files (3, landmark count): Files: " + (splittedLine.length-1) + ", Input: " + countLandmarks);
+                        throw new IllegalArgumentException("        Not coherent Landmark files (3, landmark count): Files: " + (splittedLine.length-1) + ", Input: " + countLandmarks);
 
                     }
 
                     int nodeId = Integer.parseInt(splittedLine[0]);
 
                     if (nodeId < 0 || nodeId >= nodeCount) {
-                        throw new IllegalArgumentException("Node ID out of range");
+                        throw new IllegalArgumentException("        Node ID out of range");
                     }
 
                     for (int i = 0; i < countLandmarks; i++) {
                         distancesFrom[nodeId][i] = Integer.parseInt(splittedLine[i]);
                     }
                 }
-                System.out.println("Reading Success!!");
+                System.out.println("    Reading Success!!");
                 return distancesFrom;
             } catch (IllegalArgumentException e){
                 System.out.println(e.getMessage());
@@ -88,7 +89,7 @@ public class ALT {
 
         if (!check){
             // Calculating Shi
-            System.out.println("= No file with content, calculating new distances... = ");
+            System.out.println("        No file with content, calculating new distances... = ");
             int nodeCount = graph.getNodes().size();
 
             // Assumes node IDs range from 0 to nodeCount - 1
@@ -99,22 +100,22 @@ public class ALT {
                 Arrays.fill(row, Integer.MAX_VALUE);
             }
 
-            System.out.println("Running Dijkstra...");
+            System.out.println("        Running Dijkstra...");
 
             // Run Dijkstra once for each landmark
             for (int i = 0; i < countLandmarks; i++) {
                 int landmarkId = landmarks[i];
 
                 System.out.println(
-                        "Processing landmark nr: " + landmarkId
+                        "       Processing landmark nr: " + landmarkId
                 );
 
                 Dijkstras.DijsktrasFromLandsmarks(
                         graph, landmarkId, i, distancesFrom
                 );
             }
-            System.out.println("Finished Dijkstra");
-            System.out.println("Attempting to write...");
+            System.out.println("    Finished Dijkstra");
+            System.out.println("    Attempting to write...");
 
             // Writing to file.
             try {
@@ -128,7 +129,7 @@ public class ALT {
                     bw.newLine();
 
                     // Write each node and its landmark distances
-                    System.out.println("Writing to write nodes...");
+                    System.out.println("        Writing to write nodes...");
                     for (int nodeId = 0; nodeId < distancesFrom.length; nodeId++) {
 
 
@@ -148,11 +149,11 @@ public class ALT {
                     }
                 }
 
-                System.out.println("Distances from landmark file saved");
+                System.out.println("    Distances from landmark file saved");
 
             } catch (IOException e) {
                 throw new RuntimeException(
-                        "Failed to write landmark file", e
+                        "   Failed to write landmark file", e
                 );
             }
 
@@ -223,6 +224,7 @@ public class ALT {
 
 
     public static ArrayList<RecordPath> ALTUntilXAmountPOI(Graph graph, int start, int POICode, int amount, int[] landmarks){
+        System.out.println("Start ALT: ALT Until " + amount + " with POIcode " + POICode + ".");
         Node startNode = graph.getNode(start);
         ArrayList<RecordPath> listOfPaths = new ArrayList<>();
         if (amount <= 0) return listOfPaths;
@@ -236,6 +238,7 @@ public class ALT {
         Map<Integer, Integer> distances = new HashMap<>();
 
         // Get preprossesed tables
+        System.out.println("    Getting Landsmarks");
         int[][] distancesFrom = PreprossesingLandmarks(graph, start, landmarks, true);
         int[][] distancesTo = PreprossesingLandmarks(graph.reverseGraph(), start, landmarks, false);
 
@@ -252,6 +255,7 @@ public class ALT {
 
         Pq.offer(new QueueEntry(startNode, 0, startH));
 
+        System.out.println("    Beginning search");
         while (!Pq.isEmpty()){
             QueueEntry entry = Pq.poll();
             Node currentNode = entry.node();
@@ -265,6 +269,8 @@ public class ALT {
 
             // Destination reached
             if (listOfPaths.size() == amount){
+                System.out.println("    Ending search");
+                System.out.println("Took: ");
                 return listOfPaths;
             } else {
                 if ((currentNode.POICode & POICode) == POICode) {
@@ -299,6 +305,9 @@ public class ALT {
                 }
             }
         }
+
+        System.out.println("    Search finished");
+        System.out.println("Took:");
         return listOfPaths;
     }
 
@@ -331,6 +340,7 @@ public class ALT {
         return h;
     }
     public static RecordPath RegularALT(Graph graph,int start, int end, int[] landmarks) {
+        System.out.println("Start ALT: From " + start + " till " + end + ".");
         Node startNode = graph.getNode(start);
         Node endNode = graph.getNode(end);
 
@@ -348,6 +358,7 @@ public class ALT {
                 Comparator.comparingInt(QueueEntry::priority)
         );
 
+        System.out.println("    Getting landmarks");
         int[][] distancesFrom = PreprossesingLandmarks(graph,start,landmarks,true);
         int[][] distancesTo = PreprossesingLandmarks(graph.reverseGraph(),start,landmarks,false);
         int processednodes = 0;
@@ -358,6 +369,7 @@ public class ALT {
 
         pq.offer(new QueueEntry(startNode, 0, startHeuristic));
 
+        System.out.println("    Beginning Search");
         while (!pq.isEmpty()) {
             QueueEntry entry = pq.poll();
             Node currentNode = entry.node();
@@ -372,6 +384,8 @@ public class ALT {
 
             // Destination found
             if (currentNode.id == end) {
+                System.out.println("    Search Ended");
+                System.out.println("Took: ");
                 return new RecordPath(previous, start, end, graph, "ALT", processednodes);
             }
 

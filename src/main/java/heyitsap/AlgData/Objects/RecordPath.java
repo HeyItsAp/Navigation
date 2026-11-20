@@ -1,8 +1,4 @@
-package heyitsap.AlgData.Navigation;
-
-import heyitsap.AlgData.Objects.Edge;
-import heyitsap.AlgData.Objects.Graph;
-import heyitsap.AlgData.Objects.Node;
+package heyitsap.AlgData.Objects;
 
 import java.util.*;
 
@@ -64,5 +60,27 @@ public class RecordPath {
 
         return path;
     }
-    
+    // Based on length and speedLimit. assumes all nodes have one edge
+    public int getTime(){
+        int current = start;
+        int drivingtime = 0;
+        while (current != end) {
+            Node node = graph.getNode(current);
+            Edge edge = node.edges.getFirst();
+            drivingtime += node.edges.getFirst().drivingTime;
+            current = edge.to.id;
+        }
+
+        return drivingtime;
+    }
+    public String getFormattedTime() {
+        long totalSeconds = getTime() / 100;
+
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+
+        return String.format("%02d:%02d:%02d",
+                hours, minutes, seconds);
+    }
 }

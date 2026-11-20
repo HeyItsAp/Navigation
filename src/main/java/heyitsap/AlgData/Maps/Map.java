@@ -2,7 +2,7 @@ package heyitsap.AlgData;
 
 import javax.swing.*;
 
-import heyitsap.AlgData.Navigation.RecordPath;
+import heyitsap.AlgData.Objects.RecordPath;
 import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Objects.Node;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
