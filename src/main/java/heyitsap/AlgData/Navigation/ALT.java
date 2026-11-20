@@ -275,7 +275,7 @@ public class ALT {
             // Explore neighbors
             for (Edge edge : currentNode.edges) {
                 int neighborId = edge.to.id;
-                int weight = edge.length;
+                int weight = edge.drivingTime;
 
                 if (weight < 0) {
                     throw new IllegalArgumentException("Negative edge weight");
@@ -378,17 +378,17 @@ public class ALT {
             // Explore outgoing edges
             for (Edge edge : currentNode.edges) {
                 int neighborId = edge.to.id;
-                int length = edge.length;
+                int weight = edge.drivingTime;
 
-                if (length < 0) {
+                if (weight < 0) {
                     throw new IllegalArgumentException("Negative edge weight");
                 }
 
-                if (currentDist > Integer.MAX_VALUE - length) {
+                if (currentDist > Integer.MAX_VALUE - weight) {
                     throw new ArithmeticException("Distance overflow");
                 }
 
-                int newDist = currentDist + length;
+                int newDist = currentDist + weight;
 
                 int oldDist = distances.getOrDefault(
                         neighborId, Integer.MAX_VALUE

@@ -21,13 +21,21 @@ public class Main {
             throw new RuntimeException(e);
         }
 
+
+        // Long ahh Path (island): 88494 -> 26684.
         try {
-            ArrayList<RecordPath> paths = Dijkstras.DijsktrasUntilXAmountPOI(graph, 205, 8, 2);
-            ArrayList<RecordPath> paths2 = ALT.ALTUntilXAmountPOI(graph, 205, 8, 2, ALT.islandLandmarks);
-            DualMaps.showTwoPathLists(paths, paths2);
+            RecordPath path = Dijkstras.DijsktrasStartEnd(graph, 88494, 26684);
+            ArrayList<RecordPath> paths1 = new ArrayList<>();
+            paths1.add(path);
+
+            RecordPath path2 = ALT.RegularALT(graph, 88494, 26684, ALT.islandLandmarks);
+            ArrayList<RecordPath> paths2 = new ArrayList<>();
+            paths2.add(path2);
+            DualMaps.showTwoPathLists(paths1, paths2);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
 
     }
 }

@@ -42,7 +42,7 @@ public class Dijkstras {
             // Explore
             for (Edge edge : currentNode.edges) {
                 int neigboringId = edge.to.id;
-                int newDistance = currentDistance + edge.length;
+                int newDistance = currentDistance + edge.drivingTime;
 
                 // All unvisted nodes have infinity distances:
                 int oldDist = distancesFrom[neigboringId][landmarkIndex];
@@ -69,7 +69,6 @@ public class Dijkstras {
     public static ArrayList<RecordPath> DijsktrasUntilXAmountPOI(Graph graph, int start, int POICode, int amount) {
         Node startNode = graph.getNode(start);
 
-        int length = graph.getNodes().size();
 
         // id of node, distance
         Map<Integer, Integer> distances = new HashMap<>();
@@ -108,7 +107,7 @@ public class Dijkstras {
             // Explore
             for (Edge edge : currentNode.edges) {
                 int neigboringId = edge.to.id;
-                int newDistance = currentDistance + edge.length;
+                int newDistance = currentDistance + edge.drivingTime;
 
                 // All unvisted nodes have infinity distances:
                 int oldDist = distances.getOrDefault(neigboringId, Integer.MAX_VALUE);
@@ -129,7 +128,6 @@ public class Dijkstras {
         Node startNode = graph.getNode(start);
         Node endNode = graph.getNode(end);
 
-        int length = graph.getNodes().size();
 
         // id of node, distance
         Map<Integer, Integer> distances = new HashMap<>();
@@ -161,7 +159,7 @@ public class Dijkstras {
             // Explore
             for (Edge edge : currentNode.edges) {
                 int neigboringId = edge.to.id;
-                int newDistance = currentDistance + edge.length;
+                int newDistance = currentDistance + edge.drivingTime;
 
                 // All unvisted nodes have infinity distances:
                 int oldDist = distances.getOrDefault(neigboringId, Integer.MAX_VALUE);
