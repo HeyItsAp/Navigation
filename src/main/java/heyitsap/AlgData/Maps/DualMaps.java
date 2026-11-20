@@ -58,7 +58,7 @@ public class DualMaps {
             int j = 0;
             for (RecordPath A : listA) {
                 j++;
-                JLabel label = new JLabel(j + ": " + A.start + "-> " + A.end + ". (" + A.graph.getNode(A.end).POI + "): " + A.processedNodes, SwingUtilities.CENTER);
+                JLabel label = new JLabel(j + ": " + A.start + "-> " + A.end + ". (" + A.graph.getNode(A.end).POI, SwingUtilities.CENTER);
                 label.setAlignmentX(Component.CENTER_ALIGNMENT);
                 labelsA.add(label);
             }
@@ -79,7 +79,7 @@ public class DualMaps {
             int i = 0;
             for (RecordPath B : listB){
                 i++;
-                JLabel label = new JLabel(i + ": " + B.start + "-> " + B.end + ". (" + B.graph.getNode(B.end).POI + "): " + B.processedNodes, SwingUtilities.CENTER);
+                JLabel label = new JLabel(i + ": " + B.start + "-> " + B.end + ". (" + B.graph.getNode(B.end).POI, SwingUtilities.CENTER);
                 label.setAlignmentX(Component.CENTER_ALIGNMENT);
                 labelsB.add(label);
             }
