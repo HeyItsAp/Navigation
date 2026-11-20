@@ -13,9 +13,9 @@ import java.nio.file.Path;
  *      - The assigned files just lie in the resources folder.
  */
 public class DatasettManager {
-    static Path txtFileNodes = Path.of("src/main/resources/island/noder.txt");
-    static Path txtFileKanter = Path.of("src/main/resources/island/kanter.txt");
-    static Path txtFilePOI = Path.of("src/main/resources/island/interessepkt.txt");
+    static Path txtFileNodes = Path.of("src/main/resources/noder.txt");
+    static Path txtFileKanter = Path.of("src/main/resources/kanter.txt");
+    static Path txtFilePOI = Path.of("src/main/resources/interessepkt.txt");
 
 
     public static Graph populateWithNodes(Graph graph) throws IOException {
@@ -73,7 +73,7 @@ public class DatasettManager {
                 int drivingTime = Integer.parseInt(splittedLine[2]);
                 int length = Integer.parseInt(splittedLine[3]);
                 int speedLimit = Integer.parseInt(splittedLine[4]);
-                graph.addEdge(from, to, drivingTime, length, speedLimit);
+                graph.addEdge(from,to, drivingTime, length, speedLimit);
             }
             System.out.println("Reading Success!!");
 

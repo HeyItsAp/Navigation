@@ -4,6 +4,7 @@ import heyitsap.AlgData.Objects.Edge;
 import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Objects.Node;
 import heyitsap.AlgData.Objects.RecordPath;
+import heyitsap.AlgData.Objects.Timer;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -18,7 +19,7 @@ import static heyitsap.AlgData.DatasettManager.hsplit;
 
 
 public class ALT {
-    public static int[] islandLandmarks = {22957, 31542};
+    public static int[] islandLandmarks = {2001000, 3063740};
     public static int[] nordenLandmarks;
     public static Path outputFolder = Path.of("Resources");
     public static File FromLandmarks = new File("Resources/FromLandmarks.txt");
@@ -256,6 +257,8 @@ public class ALT {
         Pq.offer(new QueueEntry(startNode, 0, startH));
 
         System.out.println("    Beginning search");
+        Timer timer = new Timer();
+        timer.start();
         while (!Pq.isEmpty()){
             QueueEntry entry = Pq.poll();
             Node currentNode = entry.node();
@@ -270,7 +273,8 @@ public class ALT {
             // Destination reached
             if (listOfPaths.size() == amount){
                 System.out.println("    Ending search");
-                System.out.println("Took: ");
+                timer.stop();
+                System.out.println("Took: " + timer.getSeconds() + " seconds");
                 return listOfPaths;
             } else {
                 if ((currentNode.POICode & POICode) == POICode) {
@@ -323,18 +327,12 @@ public class ALT {
             int targetToLandmark = to[targetId][i];
 
             // Ignore unreachable distances
-            if (landmarkToNode != Integer.MAX_VALUE &&
-                    landmarkToTarget != Integer.MAX_VALUE) {
-
-                h = Math.max(h,
-                        landmarkToTarget - landmarkToNode);
+            if (landmarkToNode != Integer.MAX_VALUE && landmarkToTarget != Integer.MAX_VALUE) {
+                h = Math.max(h, landmarkToTarget - landmarkToNode);
             }
 
-            if (nodeToLandmark != Integer.MAX_VALUE &&
-                    targetToLandmark != Integer.MAX_VALUE) {
-
-                h = Math.max(h,
-                        (nodeToLandmark - targetToLandmark));
+            if (nodeToLandmark != Integer.MAX_VALUE && targetToLandmark != Integer.MAX_VALUE) {
+                h = Math.max(h, (nodeToLandmark - targetToLandmark));
             }
         }
         return h;
@@ -370,6 +368,9 @@ public class ALT {
         pq.offer(new QueueEntry(startNode, 0, startHeuristic));
 
         System.out.println("    Beginning Search");
+        Timer timer = new Timer();
+        timer.start();
+
         while (!pq.isEmpty()) {
             QueueEntry entry = pq.poll();
             Node currentNode = entry.node();
@@ -382,15 +383,20 @@ public class ALT {
 
             processednodes++;
 
+
             // Destination found
             if (currentNode.id == end) {
                 System.out.println("    Search Ended");
                 System.out.println("Took: ");
+                timer.stop();
+                System.out.println("Took: " + timer.getSeconds() + " seconds");
                 return new RecordPath(previous, start, end, graph, "ALT", processednodes);
             }
 
             // Explore outgoing edges
+
             for (Edge edge : currentNode.edges) {
+
                 int neighborId = edge.to.id;
                 int weight = edge.drivingTime;
 
@@ -403,10 +409,7 @@ public class ALT {
                 }
 
                 int newDist = currentDist + weight;
-
-                int oldDist = distances.getOrDefault(
-                        neighborId, Integer.MAX_VALUE
-                );
+                int oldDist = distances.getOrDefault(neighborId, Integer.MAX_VALUE);
 
                 // Found a shorter path
                 if (newDist < oldDist) {
@@ -417,6 +420,7 @@ public class ALT {
 
                     // Calculate ALT heuristic
                     int h = EstimatedDistance(neighborId, end, distancesFrom, distancesTo);
+
 
                     // f(v) = g(v) + h(v)
                     int priority = newDist + h;

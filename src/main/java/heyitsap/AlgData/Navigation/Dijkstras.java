@@ -4,6 +4,7 @@ import heyitsap.AlgData.Objects.Edge;
 import heyitsap.AlgData.Objects.Graph;
 import heyitsap.AlgData.Objects.Node;
 import heyitsap.AlgData.Objects.RecordPath;
+import heyitsap.AlgData.Objects.Timer;
 
 import java.util.*;
 
@@ -84,6 +85,8 @@ public class Dijkstras {
         distances.put(start, 0);
         Pq.add(new QueueEntry(startNode, 0));
         System.out.println("    Beginning Search");
+        Timer timer = new Timer();
+        timer.start();
 
         while (!Pq.isEmpty()) {
             QueueEntry entry = Pq.poll();
@@ -100,7 +103,8 @@ public class Dijkstras {
             // Destination reached
             if (listOfPaths.size() == amount){
                 System.out.println("    Ending Search");
-                System.out.println("Took: ");
+                timer.stop();
+                System.out.println("Took: " + timer.getSeconds() + " seconds");
                 return listOfPaths;
             } else {
                 if ((currentNode.POICode & POICode) == POICode) {
@@ -148,6 +152,8 @@ public class Dijkstras {
         Pq.add(new QueueEntry(startNode, 0));
 
         System.out.println("    Beginning Search");
+        Timer timer = new Timer();
+        timer.start();
         while (!Pq.isEmpty()) {
             QueueEntry entry = Pq.poll();
             Node currentNode = entry.node;
@@ -161,7 +167,10 @@ public class Dijkstras {
             // Destination reached
             if (currentNode.id == end) {
                 System.out.println("    Search Ended");
-                System.out.println("Took: ");
+                System.out.println("    Distance " + currentDistance);
+                timer.stop();
+                System.out.println("Took: " + timer.getSeconds() + " seconds");
+
                 return new RecordPath(previous, start, end, graph, "Dijkstras", currentDistance);
             }
 

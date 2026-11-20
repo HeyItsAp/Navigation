@@ -59,9 +59,7 @@ public class Graph {
 
         // Step 2: Reverse every edge
         for (Node node : nodes.values()) {
-
             for (Edge edge : node.edges) {
-
                 int from = node.id;
                 int to = edge.to.id;
                 int drivingTime = edge.drivingTime;
